@@ -1,0 +1,43 @@
+[log]
+LogPath = ""
+LogLevel = "debug"
+MaxSize = 10
+Compress = true
+MaxAge = 7
+MaxBackups = 10
+Format = "json"
+
+[redis]
+Network = "tcp"
+Addr = "10.101.191.106:6379"
+DB = 13
+DialTimeout = 1000
+ReadTimeout = 1000
+WriteTimeout = 3000
+PoolSize = 1024
+PoolTimeout = 300
+
+[mongo]
+Host = "10.101.191.106:27017"
+Database = "SecurityManagement"
+Mode = "Strong"
+DialTimeout = 1
+ReadTimeout = 3
+WriteTimeout = 5
+PoolSize = 4096
+PoolTimeout = 300
+SyncTimeout = 5
+SafeWriteAck = 1
+SafeWriteTimeout = 5000
+SafeJournal = false
+[mongo.auth]
+User = "admin"
+Passwd = "123456"
+Database = "admin"
+
+[server]
+Port = 9090
+Mode = "debug"
+MaxWorkers = 10
+MaxQueue = 10
+TimeOut = 3

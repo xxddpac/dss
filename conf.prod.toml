@@ -1,0 +1,44 @@
+[log]
+LogPath = "/var/log/goportscan/debug.log"
+LogLevel  = "info"
+MaxSize = 10
+Compress = true
+MaxAge =  7
+MaxBackups = 10
+Format = "json"
+
+[redis]
+Network = "tcp"
+Addr = "192.168.1.11:6379"
+DB = 2
+DialTimeout = 1000
+ReadTimeout = 1000
+WriteTimeout = 3000
+PoolSize = 1024
+PoolTimeout = 300
+
+[mongo]
+Host = "192.168.1.10:27017"
+Database = "Security"
+Mode = "Strong"
+DialTimeout = 1
+ReadTimeout = 3
+WriteTimeout = 5
+PoolSize = 4096
+PoolTimeout = 300
+SyncTimeout = 5
+SafeWriteAck = 1
+SafeWriteTimeout = 5000
+SafeJournal = false
+[mongo.auth]
+User = "admin"
+Passwd = "123456"
+Database = "admin"
+
+[server]
+Port = 9090
+Mode = "release"
+MaxWorkers = 10
+MaxQueue = 10
+TimeOut = 3
+
