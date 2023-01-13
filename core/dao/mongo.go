@@ -18,3 +18,9 @@ func (r *Repository) BulkWrite(docs []interface{}) error {
 	_, err := col.Run()
 	return err
 }
+
+func (r *Repository) Insert(doc interface{}) error {
+	client := mongo.GetConn(r.Collection)
+	defer client.Close()
+	return client.Collection().Insert(doc)
+}

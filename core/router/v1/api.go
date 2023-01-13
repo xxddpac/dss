@@ -12,8 +12,8 @@ func Register(v1 *gin.RouterGroup) {
 		rule.DELETE("")          // delete rule
 	}
 	// task scheduler
-	task := v1.Group("/task", Task.Post)
+	task := v1.Group("/task")
 	{
-		task.POST("") // push task to redis
+		task.POST("", Task.Post) // push task to redis
 	}
 }
