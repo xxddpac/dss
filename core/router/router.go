@@ -4,6 +4,7 @@ import (
 	e "errors"
 	"github.com/gin-gonic/gin"
 	"goportscan/core/models"
+	v1 "goportscan/core/router/v1"
 	"net/http"
 )
 
@@ -22,5 +23,6 @@ func NewHttpRouter() *gin.Engine {
 		resp := models.Gin{Ctx: c}
 		resp.Success("pong")
 	})
+	v1.Register(router.Group("/api/v1")) //register api/v1 for producer
 	return router
 }
