@@ -14,6 +14,7 @@ func init() {
 func main() {
 	rootCmd := &cobra.Command{Use: "PortScan"}
 	rootCmd.AddCommand(cmd.Consumer())
+	rootCmd.AddCommand(cmd.Producer())
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println("rootCmd.Execute failed", err.Error())
 	}

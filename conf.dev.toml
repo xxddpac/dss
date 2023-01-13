@@ -41,3 +41,7 @@ Mode = "debug"
 MaxWorkers = 10
 MaxQueue = 10
 TimeOut = 3
+
+[producer]
+Port = 9091
+Mode = "debug"

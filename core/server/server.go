@@ -24,6 +24,8 @@ func Run(router *gin.Engine, mode global.RunMode) error {
 	switch mode {
 	case global.Consumer:
 		addr = fmt.Sprintf(":%d", conf.Consumer.Port)
+	case global.Producer:
+		addr = fmt.Sprintf(":%d", conf.Producer.Port)
 	}
 	srv := &http.Server{
 		Addr:         addr,

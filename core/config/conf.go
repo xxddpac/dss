@@ -27,6 +27,7 @@ type config struct {
 	Redis    redis.Config
 	Mongo    mongo.Config
 	Consumer Consumer
+	Producer Producer
 }
 
 type Consumer struct {
@@ -35,4 +36,9 @@ type Consumer struct {
 	MaxWorkers int
 	MaxQueue   int
 	TimeOut    time.Duration
+}
+
+type Producer struct {
+	Port int
+	Mode string
 }
