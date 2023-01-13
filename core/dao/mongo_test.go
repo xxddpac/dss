@@ -18,7 +18,7 @@ var (
 	}
 )
 
-func TestMongo(t *testing.T) {
+func TestRepository_BulkWrite(t *testing.T) {
 	if err := mongo.Init(fakeMongoConfig); err != nil {
 		t.Fatal(err)
 	}
@@ -34,6 +34,21 @@ func TestMongo(t *testing.T) {
 			Port: "23",
 		}))
 	if err := repo.BulkWrite(resp); err != nil {
+		t.Fatal(err)
+	}
+}
+
+func TestRepository_Insert(t *testing.T) {
+	if err := mongo.Init(fakeMongoConfig); err != nil {
+		t.Fatal(err)
+	}
+	repo := &Repository{"port_scan_rule"}
+	if err := repo.Insert(models.RuleInsertFunc(models.Rule{
+		Name:       "test",
+		Status:     true,
+		TargetHost: "1.1.1.0/24",
+		TargetPort: "1-65535",
+	})); err != nil {
 		t.Fatal(err)
 	}
 }
