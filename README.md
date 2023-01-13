@@ -1,1 +1,1 @@
-# Distributed Port Scan
+# An distributed port scan written in Go(Goroutine Pool + Redis)
