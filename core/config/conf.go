@@ -23,13 +23,13 @@ func Init(conf string) {
 }
 
 type config struct {
-	Log    log.Config
-	Redis  redis.Config
-	Mongo  mongo.Config
-	Server Server
+	Log      log.Config
+	Redis    redis.Config
+	Mongo    mongo.Config
+	Consumer Consumer
 }
 
-type Server struct {
+type Consumer struct {
 	Port       int
 	Mode       string
 	MaxWorkers int

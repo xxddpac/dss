@@ -16,12 +16,15 @@ import (
 	"time"
 )
 
-func Run(router *gin.Engine) error {
+func Run(router *gin.Engine, mode global.RunMode) error {
 	var (
 		addr string
 		conf = config.CoreConf
 	)
-	addr = fmt.Sprintf(":%d", conf.Server.Port)
+	switch mode {
+	case global.Consumer:
+		addr = fmt.Sprintf(":%d", conf.Consumer.Port)
+	}
 	srv := &http.Server{
 		Addr:         addr,
 		Handler:      router,
@@ -34,11 +37,11 @@ func Run(router *gin.Engine) error {
 			log.Fatal("listen error", zap.Error(err))
 		}
 	}()
-	tryDisConn(srv)
+	tryDisConn(srv, mode)
 	return nil
 }
 
-func tryDisConn(srv *http.Server) {
+func tryDisConn(srv *http.Server, mode global.RunMode) {
 	signals := make(chan os.Signal, 1)
 	signal.Notify(signals, os.Interrupt, os.Kill, syscall.SIGKILL,
 		syscall.SIGHUP, syscall.SIGINT, syscall.SIGQUIT, syscall.SIGILL, syscall.SIGTRAP,
@@ -56,8 +59,10 @@ func tryDisConn(srv *http.Server) {
 		log.Info(fmt.Sprintf("get signal %s, application will shutdown.", sig))
 		log.Debug("stop HttpServer...")
 		_ = srv.Shutdown(context.Background())
-		scan.Close()
-		global.Cancel()
+		if mode == global.Consumer {
+			scan.Close()
+			global.Cancel()
+		}
 		os.Exit(0)
 	}
 }

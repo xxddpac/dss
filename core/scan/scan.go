@@ -28,7 +28,7 @@ type scanInfo struct {
 }
 
 func Init(maxWorkers, maxQueue int, log *zap.Logger) {
-	timeout = config.CoreConf.Server.TimeOut
+	timeout = config.CoreConf.Consumer.TimeOut
 	pool = async.NewWorkerPool(maxWorkers, maxQueue, log).Run()
 	go run()
 	go store()
