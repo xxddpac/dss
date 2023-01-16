@@ -24,3 +24,12 @@ func (r *Repository) Insert(doc interface{}) error {
 	defer client.Close()
 	return client.Collection().Insert(doc)
 }
+
+func (r *Repository) SelectAll(result interface{}, fields ...string) error {
+	client := mongo.GetConn(r.Collection)
+	defer client.Close()
+	if err := client.Collection().Find(nil).Sort(fields...).All(result); nil != err {
+		return err
+	}
+	return nil
+}
