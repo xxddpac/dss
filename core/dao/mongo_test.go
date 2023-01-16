@@ -1,6 +1,7 @@
 package dao
 
 import (
+	"fmt"
 	"goportscan/common/mongo"
 	"goportscan/core/models"
 	"testing"
@@ -50,5 +51,22 @@ func TestRepository_Insert(t *testing.T) {
 		TargetPort: "1-65535",
 	})); err != nil {
 		t.Fatal(err)
+	}
+}
+
+func TestRepository_Select(t *testing.T) {
+	if err := mongo.Init(fakeMongoConfig); err != nil {
+		t.Fatal(err)
+	}
+	repo := &Repository{"port_scan_rule"}
+	var (
+		ruleSlice []models.Rule
+	)
+	if err := repo.SelectAll(&ruleSlice); err != nil {
+		t.Fatal(err)
+	}
+	fmt.Println(len(ruleSlice))
+	for _, item := range ruleSlice {
+		fmt.Println(item)
 	}
 }
