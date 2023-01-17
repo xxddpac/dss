@@ -20,7 +20,7 @@ func (r RuleType) String() string {
 	case Single:
 		return "单个IP类型" //192.168.1.1
 	case Range:
-		return "连续范围IP类型" //192.168.1.1-192.168.1.100
+		return "连续范围IP类型" //192.168.1.1-100
 	case Cidr:
 		return "网段类型" //192.168.1.0/24
 	default:
