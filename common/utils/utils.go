@@ -28,3 +28,26 @@ func ParseCidr(cidr string) bool {
 	_, _, err := net.ParseCIDR(cidr)
 	return err == nil
 }
+
+func GetIpListByCidr(subnet string) []string {
+	var (
+		ips = make([]string, 0)
+	)
+	ip, ipNet, err := net.ParseCIDR(subnet)
+	if err != nil {
+		return nil
+	}
+	for ip := ip.Mask(ipNet.Mask); ipNet.Contains(ip); include(ip) {
+		ips = append(ips, ip.String())
+	}
+	return ips[1 : len(ips)-1]
+}
+
+func include(ip net.IP) {
+	for j := len(ip) - 1; j >= 0; j-- {
+		ip[j]++
+		if ip[j] > 0 {
+			break
+		}
+	}
+}

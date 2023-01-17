@@ -63,8 +63,8 @@ func tryDisConn(srv *http.Server, mode global.RunMode) {
 		_ = srv.Shutdown(context.Background())
 		if mode == global.Consumer {
 			scan.Close()
-			global.Cancel()
 		}
+		global.Cancel()
 		os.Exit(0)
 	}
 }
