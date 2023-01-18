@@ -32,7 +32,21 @@ func parseRule(ruleSlice []models.Rule) {
 				taskQueue <- models.Scan{Host: item.TargetHost, Port: fmt.Sprintf("%v", i)}
 			}
 		case global.Range:
-			//todo
+			//192.168.1.10-30
+			ipRange := strings.Split(item.TargetHost, "-")
+			ipStart := ipRange[0]
+			ipSplit := strings.Split(ipStart, ".")
+			ipEndLastNum := utils.StrToInt(ipRange[1])
+			ipStartLastNum := utils.StrToInt(ipSplit[3])
+			prefix := fmt.Sprintf("%v.%v.%v.", ipSplit[0], ipSplit[1], ipSplit[2])
+			for i := ipStartLastNum; i <= ipEndLastNum; i++ {
+				for p := portStart; p <= portEnd; p++ {
+					taskQueue <- models.Scan{
+						Host: fmt.Sprintf("%v%v", prefix, i),
+						Port: fmt.Sprintf("%v", p),
+					}
+				}
+			}
 		case global.Cidr:
 			ipSlice := utils.GetIpListByCidr(item.TargetHost)
 			for _, ip := range ipSlice {
