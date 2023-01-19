@@ -50,6 +50,7 @@ type RuleQueryResult struct {
 
 type RuleQueryResultDto struct {
 	RuleQueryDto
+	TypeDesc string `json:"type_desc"`
 }
 
 type RuleQueryDto struct {
@@ -65,6 +66,7 @@ func RuleQueryResultFunc(r []*RuleInsert) []RuleQueryResultDto {
 	for _, item := range r {
 		resp.RuleQueryDto = *item.ToDto()
 		resp.Rule = item.Rule
+		resp.TypeDesc = item.Type.String()
 		result = append(result, resp)
 	}
 	return result
