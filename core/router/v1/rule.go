@@ -16,6 +16,14 @@ var Rule *_Rule
 type _Rule struct {
 }
 
+// Post
+// @Summary Add New Rule
+// @Tags Rule
+// @Accept  json
+// @Produce  json
+// @Param param body models.Rule true "Request Body"
+// @Success 200 {object} models.Response
+// @Router /api/v1/rule [post]
 func (*_Rule) Post(ctx *gin.Context) {
 	var (
 		g    = models.Gin{Ctx: ctx}
@@ -71,6 +79,14 @@ func (*_Rule) Post(ctx *gin.Context) {
 	g.Success(nil)
 }
 
+// Delete
+// @Summary Delete Rule By ID
+// @Tags Rule
+// @Accept  json
+// @Produce  json
+// @Param id query string true "Rule ID"
+// @Success 200 {object} models.Response
+// @Router /api/v1/rule [delete]
 func (*_Rule) Delete(ctx *gin.Context) {
 	var (
 		g     = models.Gin{Ctx: ctx}
@@ -87,6 +103,18 @@ func (*_Rule) Delete(ctx *gin.Context) {
 	g.Success(nil)
 }
 
+// Get
+// @Summary Get Rule List
+// @Tags Rule
+// @Accept  json
+// @Produce  json
+// @Param search query string false "Fuzzy Query"
+// @Param type query int false "Rule Type 1:Single 2:Range 3:CIDR"
+// @Param status query string false "Rule Status true/false"
+// @Param page query string false "Current Page Default:1"
+// @Param size query string false "Current Size Default:10"
+// @Success 200 {object} models.Response
+// @Router /api/v1/rule [get]
 func (*_Rule) Get(ctx *gin.Context) {
 	var (
 		g     = models.Gin{Ctx: ctx}
@@ -104,6 +132,15 @@ func (*_Rule) Get(ctx *gin.Context) {
 	g.Success(resp)
 }
 
+// Put
+// @Summary Modify Rule By ID
+// @Tags Rule
+// @Accept  json
+// @Produce  json
+// @Param id query string true "Rule ID"
+// @Param param body models.Rule true "Request Body"
+// @Success 200 {object} models.Response
+// @Router /api/v1/rule [put]
 func (*_Rule) Put(ctx *gin.Context) {
 	var (
 		g     = models.Gin{Ctx: ctx}

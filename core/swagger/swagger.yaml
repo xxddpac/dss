@@ -1,0 +1,136 @@
+definitions:
+  models.Response:
+    properties:
+      code:
+        type: integer
+      data:
+        type: object
+      msg:
+        type: string
+    type: object
+  models.Rule:
+    properties:
+      name:
+        type: string
+      status:
+        type: boolean
+      target_host:
+        type: string
+      target_port:
+        type: string
+      type:
+        type: integer
+    required:
+    - name
+    - status
+    - target_host
+    - target_port
+    - type
+    type: object
+info:
+  contact: {}
+  description: Distributed Scan Services API DOCS
+  license: {}
+  title: Distributed Scan Services
+  version: "1.0"
+paths:
+  /api/v1/rule:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: Rule ID
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Delete Rule By ID
+      tags:
+      - Rule
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Fuzzy Query
+        in: query
+        name: search
+        type: string
+      - description: Rule Type 1:Single 2:Range 3:CIDR
+        in: query
+        name: type
+        type: integer
+      - description: Rule Status true/false
+        in: query
+        name: status
+        type: string
+      - description: Current Page Default:1
+        in: query
+        name: page
+        type: string
+      - description: Current Size Default:10
+        in: query
+        name: size
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Get Rule List
+      tags:
+      - Rule
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Request Body
+        in: body
+        name: param
+        required: true
+        schema:
+          $ref: '#/definitions/models.Rule'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Add New Rule
+      tags:
+      - Rule
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Rule ID
+        in: query
+        name: id
+        required: true
+        type: string
+      - description: Request Body
+        in: body
+        name: param
+        required: true
+        schema:
+          $ref: '#/definitions/models.Rule'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Modify Rule By ID
+      tags:
+      - Rule
+swagger: "2.0"

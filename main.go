@@ -11,6 +11,9 @@ func init() {
 	runtime.GOMAXPROCS(runtime.NumCPU())
 }
 
+// @title Distributed Scan Services
+// @version 1.0
+// @description Distributed Scan Services API DOCS
 func main() {
 	rootCmd := &cobra.Command{Use: "PortScan"}
 	rootCmd.AddCommand(cmd.Consumer())
