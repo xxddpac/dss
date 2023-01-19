@@ -8,7 +8,7 @@ func Register(v1 *gin.RouterGroup) {
 	{
 		rule.POST("", Rule.Post)     // add rule
 		rule.GET("", Rule.Get)       // list rule
-		rule.PUT("")                 // modify rule
+		rule.PUT("", Rule.Put)       // modify rule
 		rule.DELETE("", Rule.Delete) // delete rule
 	}
 	// task scheduler

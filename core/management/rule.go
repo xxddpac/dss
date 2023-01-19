@@ -1,11 +1,13 @@
 package management
 
 import (
+	"fmt"
 	"github.com/globalsign/mgo/bson"
 	"goportscan/common/utils"
 	"goportscan/core/dao"
 	"goportscan/core/models"
 	"math"
+	"time"
 )
 
 var (
@@ -58,4 +60,22 @@ func (*_RuleManager) Get(param models.RuleQuery) (interface{}, error) {
 	result.Items = models.RuleQueryResultFunc(resp)
 	result.Pages = int(math.Ceil(float64(result.Total) / float64(param.Size)))
 	return result, nil
+}
+
+func (*_RuleManager) Put(param models.QueryID, body models.Rule) error {
+	var (
+		r models.RuleInsert
+	)
+	if !bson.IsObjectIdHex(param.ID) {
+		return fmt.Errorf("invalid ObjectIdHex")
+	}
+	if err := repo.SelectById(dao.BsonId(param.ID), &r); err != nil {
+		return err
+	}
+	r.Rule = body
+	r.UpdatedTime = time.Now().Unix()
+	if err := repo.UpdateById(dao.BsonId(param.ID), &r); err != nil {
+		return err
+	}
+	return nil
 }

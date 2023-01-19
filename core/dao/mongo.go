@@ -62,3 +62,18 @@ func (r *Repository) SelectWithPage(query bson.M, page, size int, result interfa
 	}
 	return nil
 }
+
+func (r *Repository) SelectById(id interface{}, result interface{}) error {
+	client := mongo.GetConn(r.Collection)
+	defer client.Close()
+	if err := client.Collection().FindId(id).One(result); nil != err {
+		return err
+	}
+	return nil
+}
+
+func (r *Repository) UpdateById(id interface{}, update interface{}) error {
+	client := mongo.GetConn(r.Collection)
+	defer client.Close()
+	return client.Collection().UpdateId(id, update)
+}

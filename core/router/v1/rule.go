@@ -103,3 +103,24 @@ func (*_Rule) Get(ctx *gin.Context) {
 	}
 	g.Success(resp)
 }
+
+func (*_Rule) Put(ctx *gin.Context) {
+	var (
+		g     = models.Gin{Ctx: ctx}
+		param models.QueryID
+		body  models.Rule
+	)
+	if err := ctx.ShouldBindQuery(&param); err != nil {
+		g.Fail(http.StatusBadRequest, err)
+		return
+	}
+	if err := ctx.ShouldBindJSON(&body); err != nil {
+		g.Fail(http.StatusBadRequest, err)
+		return
+	}
+	if err := management.RuleManager.Put(param, body); err != nil {
+		g.Fail(http.StatusBadRequest, err)
+		return
+	}
+	g.Success(nil)
+}
