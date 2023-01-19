@@ -26,6 +26,9 @@ func (*_RuleManager) Post(body models.Rule) error {
 }
 
 func (*_RuleManager) Delete(param models.QueryID) error {
+	if !bson.IsObjectIdHex(param.ID) {
+		return fmt.Errorf("invalid ObjectIdHex")
+	}
 	if err := repo.RemoveByID(dao.BsonId(param.ID)); err != nil {
 		return err
 	}
