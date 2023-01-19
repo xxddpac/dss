@@ -9,3 +9,7 @@ type BasePo struct {
 	CreatedTime int64         `bson:"created_time,omitempty"`
 	UpdatedTime int64         `bson:"updated_time,omitempty"`
 }
+
+type QueryID struct {
+	ID string `form:"id" binding:"required"`
+}

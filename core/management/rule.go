@@ -19,3 +19,10 @@ func (*_RuleManager) Post(body models.Rule) error {
 	}
 	return nil
 }
+
+func (*_RuleManager) Delete(param models.QueryID) error {
+	if err := repo.RemoveByID(dao.BsonId(param.ID)); err != nil {
+		return err
+	}
+	return nil
+}

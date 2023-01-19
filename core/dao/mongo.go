@@ -1,11 +1,16 @@
 package dao
 
 import (
+	"github.com/globalsign/mgo/bson"
 	"goportscan/common/mongo"
 )
 
 type Repository struct {
 	Collection string
+}
+
+func BsonId(id string) bson.ObjectId {
+	return bson.ObjectIdHex(id)
 }
 
 func (r *Repository) BulkWrite(docs []interface{}) error {
@@ -32,4 +37,10 @@ func (r *Repository) SelectAll(result interface{}, fields ...string) error {
 		return err
 	}
 	return nil
+}
+
+func (r *Repository) RemoveByID(id interface{}) error {
+	client := mongo.GetConn(r.Collection)
+	defer client.Close()
+	return client.Collection().RemoveId(id)
 }

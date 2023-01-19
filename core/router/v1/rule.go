@@ -70,3 +70,19 @@ func (*_Rule) Post(ctx *gin.Context) {
 	}
 	g.Success(nil)
 }
+
+func (*_Rule) Delete(ctx *gin.Context) {
+	var (
+		g     = models.Gin{Ctx: ctx}
+		param models.QueryID
+	)
+	if err := ctx.ShouldBindQuery(&param); err != nil {
+		g.Fail(http.StatusBadRequest, err)
+		return
+	}
+	if err := management.RuleManager.Delete(param); err != nil {
+		g.Fail(http.StatusBadRequest, err)
+		return
+	}
+	g.Success(nil)
+}
