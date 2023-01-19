@@ -29,3 +29,49 @@ func RuleInsertFunc(r Rule) *RuleInsert {
 		},
 	}
 }
+
+type RuleQuery struct {
+	QueryPage
+	Status string          `form:"status"`
+	Type   global.RuleType `form:"type"`
+	Search string          `form:"search"`
+}
+
+func RuleQueryFunc() *RuleQuery {
+	return &RuleQuery{
+		QueryPage: QueryPage{Page: 1, Size: 10},
+	}
+}
+
+type RuleQueryResult struct {
+	QueryResult
+	Items []RuleQueryResultDto `json:"items"`
+}
+
+type RuleQueryResultDto struct {
+	RuleQueryDto
+}
+
+type RuleQueryDto struct {
+	BaseDto
+	Rule
+}
+
+func RuleQueryResultFunc(r []*RuleInsert) []RuleQueryResultDto {
+	var (
+		resp   RuleQueryResultDto
+		result []RuleQueryResultDto
+	)
+	for _, item := range r {
+		resp.RuleQueryDto = *item.ToDto()
+		resp.Rule = item.Rule
+		result = append(result, resp)
+	}
+	return result
+}
+
+func (r *RuleInsert) ToDto() *RuleQueryDto {
+	dto := &RuleQueryDto{}
+	dto.BaseDto = *(&r.BasePo).ToDto()
+	return dto
+}

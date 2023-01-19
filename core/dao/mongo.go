@@ -44,3 +44,21 @@ func (r *Repository) RemoveByID(id interface{}) error {
 	defer client.Close()
 	return client.Collection().RemoveId(id)
 }
+
+func (r *Repository) Count(query bson.M) int {
+	client := mongo.GetConn(r.Collection)
+	defer client.Close()
+	num, _ := client.Collection().Find(query).Count()
+	return num
+}
+
+func (r *Repository) SelectWithPage(query bson.M, page, size int, result interface{}, fields ...string) error {
+	client := mongo.GetConn(r.Collection)
+	defer client.Close()
+	limit := size
+	skip := (page - 1) * size
+	if err := client.Collection().Find(query).Sort(fields...).Skip(skip).Limit(limit).All(result); nil != err {
+		return err
+	}
+	return nil
+}

@@ -7,7 +7,7 @@ func Register(v1 *gin.RouterGroup) {
 	rule := v1.Group("/rule")
 	{
 		rule.POST("", Rule.Post)     // add rule
-		rule.GET("")                 // list rule
+		rule.GET("", Rule.Get)       // list rule
 		rule.PUT("")                 // modify rule
 		rule.DELETE("", Rule.Delete) // delete rule
 	}

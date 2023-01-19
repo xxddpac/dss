@@ -86,3 +86,20 @@ func (*_Rule) Delete(ctx *gin.Context) {
 	}
 	g.Success(nil)
 }
+
+func (*_Rule) Get(ctx *gin.Context) {
+	var (
+		g     = models.Gin{Ctx: ctx}
+		param = models.RuleQueryFunc()
+	)
+	if err := ctx.ShouldBindQuery(&param); err != nil {
+		g.Fail(http.StatusBadRequest, err)
+		return
+	}
+	resp, err := management.RuleManager.Get(*param)
+	if err != nil {
+		g.Fail(http.StatusBadRequest, err)
+		return
+	}
+	g.Success(resp)
+}

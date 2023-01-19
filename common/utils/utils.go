@@ -4,6 +4,11 @@ import (
 	"encoding/json"
 	"net"
 	"strconv"
+	"time"
+)
+
+const (
+	defaultTimeLayout = "2006-01-02 15:04:05"
 )
 
 func Marshal(v interface{}) (string, error) {
@@ -50,4 +55,13 @@ func include(ip net.IP) {
 			break
 		}
 	}
+}
+
+func UnixToString(timestamp int64) string {
+	return time.Unix(timestamp, 0).Local().Format(defaultTimeLayout)
+}
+
+func StrToBool(str string) bool {
+	b, _ := strconv.ParseBool(str)
+	return b
 }
