@@ -1,3 +1,3 @@
-# An distributed port scan written in Go(Goroutine Pool + Redis)
+# An Distributed Security Scan System written in Go
 
 ![img](doc/portscan.jpg)
