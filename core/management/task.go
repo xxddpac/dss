@@ -29,7 +29,11 @@ func parseRule(ruleSlice []models.Rule) {
 		switch item.Type {
 		case global.Single:
 			for i := portStart; i <= portEnd; i++ {
-				taskQueue <- models.Scan{Host: item.TargetHost, Port: fmt.Sprintf("%v", i)}
+				taskQueue <- models.Scan{
+					Host:     item.TargetHost,
+					Port:     fmt.Sprintf("%v", i),
+					Location: item.Location,
+				}
 			}
 		case global.Range:
 			//192.168.1.10-30
@@ -42,8 +46,9 @@ func parseRule(ruleSlice []models.Rule) {
 			for i := ipStartLastNum; i <= ipEndLastNum; i++ {
 				for p := portStart; p <= portEnd; p++ {
 					taskQueue <- models.Scan{
-						Host: fmt.Sprintf("%v%v", prefix, i),
-						Port: fmt.Sprintf("%v", p),
+						Host:     fmt.Sprintf("%v%v", prefix, i),
+						Port:     fmt.Sprintf("%v", p),
+						Location: item.Location,
 					}
 				}
 			}
@@ -51,7 +56,11 @@ func parseRule(ruleSlice []models.Rule) {
 			ipSlice := utils.GetIpListByCidr(item.TargetHost)
 			for _, ip := range ipSlice {
 				for i := portStart; i <= portEnd; i++ {
-					taskQueue <- models.Scan{Host: ip, Port: fmt.Sprintf("%v", i)}
+					taskQueue <- models.Scan{
+						Host:     ip,
+						Port:     fmt.Sprintf("%v", i),
+						Location: item.Location,
+					}
 				}
 			}
 		}

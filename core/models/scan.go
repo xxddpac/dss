@@ -8,6 +8,7 @@ import (
 type Scan struct {
 	Host     string `json:"host" bson:"host"`
 	Port     string `json:"port" bson:"port"`
+	Location string `json:"location" bson:"location"`
 	DoneTime string `json:"done_time" bson:"done_time"`
 }
 

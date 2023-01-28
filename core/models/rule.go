@@ -12,6 +12,7 @@ type Rule struct {
 	Type       global.RuleType `json:"type" bson:"type" binding:"required"`
 	TargetHost string          `json:"target_host" bson:"target_host" binding:"required"`
 	TargetPort string          `json:"target_port" bson:"target_port" binding:"required"`
+	Location   string          `json:"location" bson:"location"`
 }
 
 type RuleInsert struct {

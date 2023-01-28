@@ -24,8 +24,9 @@ var (
 )
 
 type scanInfo struct {
-	Host string
-	Port string
+	Host     string
+	Port     string
+	Location string
 }
 
 func Init(maxWorkers, maxQueue int, log *zap.Logger) {
@@ -79,6 +80,7 @@ func store() {
 				resp = append(resp, models.ScanInsertFunc(models.Scan{
 					Host:     item.Host,
 					Port:     item.Port,
+					Location: item.Location,
 					DoneTime: time.Now().Format(utils.TimeLayout),
 				}))
 			}
