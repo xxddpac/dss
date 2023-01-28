@@ -39,3 +39,19 @@ func (*_Port) Get(ctx *gin.Context) {
 	}
 	g.Success(resp)
 }
+
+func (*_Port) Remind(ctx *gin.Context) {
+	//todo
+}
+
+func (*_Port) Stats(ctx *gin.Context) {
+	//todo
+}
+
+func (*_Port) Clear(ctx *gin.Context) {
+	//todo
+}
+
+func (*_Port) Trend(ctx *gin.Context) {
+	//todo
+}

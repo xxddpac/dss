@@ -19,6 +19,10 @@ func Register(v1 *gin.RouterGroup) {
 	//port scan result
 	port := v1.Group("/port")
 	{
-		port.GET("", Port.Get) //list port scan result (today)
+		port.GET("", Port.Get)           // list port scan result
+		port.GET("trend", Port.Trend)    // last 7 days scan result trend
+		port.GET("Stats", Port.Stats)    // last 7 days scan result stats
+		port.GET("remind", Port.Remind)  // send notification if new port open  (schedule)
+		port.DELETE("clear", Port.Clear) // save last 7 days result (schedule)
 	}
 }
