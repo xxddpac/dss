@@ -16,4 +16,9 @@ func Register(v1 *gin.RouterGroup) {
 	{
 		task.POST("", Task.Post) // push task to redis
 	}
+	//port scan result
+	port := v1.Group("/port")
+	{
+		port.GET("", Port.Get) //list port scan result (today)
+	}
 }
