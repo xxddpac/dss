@@ -6,6 +6,7 @@ import (
 	"go.uber.org/zap"
 	"goportscan/common/async"
 	"goportscan/common/log"
+	"goportscan/common/utils"
 	"goportscan/core/config"
 	"goportscan/core/dao"
 	"goportscan/core/global"
@@ -76,8 +77,9 @@ func store() {
 			}
 			for _, item := range result {
 				resp = append(resp, models.ScanInsertFunc(models.Scan{
-					Host: item.Host,
-					Port: item.Port,
+					Host:     item.Host,
+					Port:     item.Port,
+					DoneTime: time.Now().Format(utils.TimeLayout),
 				}))
 			}
 			if err := repo.BulkWrite(resp); err != nil {
