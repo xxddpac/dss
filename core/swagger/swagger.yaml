@@ -133,4 +133,18 @@ paths:
       summary: Modify Rule By ID
       tags:
       - Rule
+  /api/v1/task:
+    post:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Task Execute
+      tags:
+      - Task
 swagger: "2.0"
