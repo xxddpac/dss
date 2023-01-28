@@ -1,4 +1,4 @@
-module goportscan
+module dss
 
 go 1.19
 

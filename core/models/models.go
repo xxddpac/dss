@@ -1,8 +1,8 @@
 package models
 
 import (
+	"dss/common/utils"
 	"github.com/globalsign/mgo/bson"
-	"goportscan/common/utils"
 )
 
 type BasePo struct {

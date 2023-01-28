@@ -1,9 +1,9 @@
 package dao
 
 import (
+	"dss/common/mongo"
+	"dss/core/models"
 	"fmt"
-	"goportscan/common/mongo"
-	"goportscan/core/models"
 	"testing"
 )
 

@@ -1,12 +1,12 @@
 package management
 
 import (
+	"dss/common/log"
+	"dss/common/utils"
+	"dss/core/dao"
+	"dss/core/global"
+	"dss/core/models"
 	"fmt"
-	"goportscan/common/log"
-	"goportscan/common/utils"
-	"goportscan/core/dao"
-	"goportscan/core/global"
-	"goportscan/core/models"
 	"strings"
 )
 

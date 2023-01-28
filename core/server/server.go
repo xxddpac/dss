@@ -2,13 +2,13 @@ package server
 
 import (
 	"context"
+	"dss/common/log"
+	"dss/core/config"
+	"dss/core/global"
+	"dss/core/scan"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
-	"goportscan/common/log"
-	"goportscan/core/config"
-	"goportscan/core/global"
-	"goportscan/core/scan"
 	"net/http"
 	"os"
 	"os/signal"

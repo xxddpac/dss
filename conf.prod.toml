@@ -1,5 +1,5 @@
 [log]
-LogPath = "/var/log/goportscan/debug.log"
+LogPath = "/var/log/dss/debug.log"
 LogLevel = "debug"
 MaxSize = 10
 Compress = true

@@ -1,16 +1,16 @@
 package scan
 
 import (
+	"dss/common/async"
+	"dss/common/log"
+	"dss/common/utils"
+	"dss/core/config"
+	"dss/core/dao"
+	"dss/core/global"
+	"dss/core/models"
 	"encoding/json"
 	"fmt"
 	"go.uber.org/zap"
-	"goportscan/common/async"
-	"goportscan/common/log"
-	"goportscan/common/utils"
-	"goportscan/core/config"
-	"goportscan/core/dao"
-	"goportscan/core/global"
-	"goportscan/core/models"
 	"net"
 	"time"
 )

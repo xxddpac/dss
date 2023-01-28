@@ -1,8 +1,8 @@
 package models
 
 import (
+	"dss/core/global"
 	"github.com/globalsign/mgo/bson"
-	"goportscan/core/global"
 	"time"
 )
 

@@ -2,7 +2,7 @@ package dao
 
 import (
 	"fmt"
-	"goportscan/common/redis"
+	"dss/common/redis"
 	"testing"
 	"time"
 )

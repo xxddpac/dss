@@ -1,11 +1,11 @@
 package config
 
 import (
+	"dss/common/log"
+	"dss/common/mongo"
+	"dss/common/redis"
 	"fmt"
 	"github.com/BurntSushi/toml"
-	"goportscan/common/log"
-	"goportscan/common/mongo"
-	"goportscan/common/redis"
 	"os"
 	"time"
 )

@@ -1,9 +1,9 @@
 package v1
 
 import (
+	"dss/core/management"
+	"dss/core/models"
 	"github.com/gin-gonic/gin"
-	"goportscan/core/management"
-	"goportscan/core/models"
 	"net/http"
 )
 

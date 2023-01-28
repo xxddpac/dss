@@ -1,8 +1,8 @@
 package models
 
 import (
+	"dss/core/errors"
 	"github.com/gin-gonic/gin"
-	"goportscan/core/errors"
 	"net/http"
 )
 

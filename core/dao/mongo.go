@@ -1,8 +1,8 @@
 package dao
 
 import (
+	"dss/common/mongo"
 	"github.com/globalsign/mgo/bson"
-	"goportscan/common/mongo"
 )
 
 type Repository struct {

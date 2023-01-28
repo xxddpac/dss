@@ -2,7 +2,7 @@ package dao
 
 import (
 	"context"
-	"goportscan/common/redis"
+	"dss/common/redis"
 	"sync"
 	"time"
 )

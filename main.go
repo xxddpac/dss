@@ -1,9 +1,9 @@
 package main
 
 import (
+	"dss/core/cmd"
 	"fmt"
 	"github.com/spf13/cobra"
-	"goportscan/core/cmd"
 	"runtime"
 )
 
