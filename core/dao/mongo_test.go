@@ -4,6 +4,7 @@ import (
 	"dss/common/mongo"
 	"dss/core/models"
 	"fmt"
+	"github.com/globalsign/mgo/bson"
 	"testing"
 )
 
@@ -69,4 +70,21 @@ func TestRepository_Select(t *testing.T) {
 	for _, item := range ruleSlice {
 		fmt.Println(item)
 	}
+}
+
+func TestRepository_Aggregate(t *testing.T) {
+	var (
+		resp []bson.M
+		repo = &Repository{"port_scan"}
+	)
+	if err := mongo.Init(fakeMongoConfig); err != nil {
+		t.Fatal(err)
+	}
+	group := bson.M{"$group": bson.M{"_id": "$location", "count": bson.M{"$sum": 1}}}
+	orderBy := bson.M{"$sort": bson.M{"count": 1}}
+	pipeline := []bson.M{group, orderBy}
+	if err := repo.Aggregate(pipeline, &resp); err != nil {
+		t.Fatal(err)
+	}
+	fmt.Println(resp)
 }
