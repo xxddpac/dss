@@ -17,6 +17,7 @@ type _Task struct {
 // @Accept  json
 // @Produce  json
 // @Success 200 {object} models.Response
+// @Failure 400 {object} models.Response
 // @Router /api/v1/task [post]
 func (*_Task) Post(ctx *gin.Context) {
 	var (

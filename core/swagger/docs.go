@@ -46,6 +46,12 @@ var doc = `{
                     },
                     {
                         "type": "string",
+                        "description": "Location Select",
+                        "name": "location",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "description": "Date Select",
                         "name": "date",
                         "in": "query"
@@ -66,6 +72,40 @@ var doc = `{
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/port/location": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "PortScan"
+                ],
+                "summary": "GroupBy Location",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/models.Response"
                         }
@@ -123,6 +163,12 @@ var doc = `{
                         "schema": {
                             "$ref": "#/definitions/models.Response"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
                     }
                 }
             },
@@ -161,6 +207,12 @@ var doc = `{
                         "schema": {
                             "$ref": "#/definitions/models.Response"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
                     }
                 }
             },
@@ -189,6 +241,12 @@ var doc = `{
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/models.Response"
                         }
@@ -221,6 +279,12 @@ var doc = `{
                         "schema": {
                             "$ref": "#/definitions/models.Response"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
                     }
                 }
             }
@@ -240,6 +304,12 @@ var doc = `{
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/models.Response"
                         }
@@ -273,6 +343,9 @@ var doc = `{
                 "type"
             ],
             "properties": {
+                "location": {
+                    "type": "string"
+                },
                 "name": {
                     "type": "string"
                 },

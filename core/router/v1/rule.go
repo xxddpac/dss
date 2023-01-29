@@ -23,6 +23,7 @@ type _Rule struct {
 // @Produce  json
 // @Param param body models.Rule true "Request Body"
 // @Success 200 {object} models.Response
+// @Failure 400 {object} models.Response
 // @Router /api/v1/rule [post]
 func (*_Rule) Post(ctx *gin.Context) {
 	var (
@@ -86,6 +87,7 @@ func (*_Rule) Post(ctx *gin.Context) {
 // @Produce  json
 // @Param id query string true "Rule ID"
 // @Success 200 {object} models.Response
+// @Failure 400 {object} models.Response
 // @Router /api/v1/rule [delete]
 func (*_Rule) Delete(ctx *gin.Context) {
 	var (
@@ -114,6 +116,7 @@ func (*_Rule) Delete(ctx *gin.Context) {
 // @Param page query string false "Current Page Default:1"
 // @Param size query string false "Current Size Default:10"
 // @Success 200 {object} models.Response
+// @Failure 400 {object} models.Response
 // @Router /api/v1/rule [get]
 func (*_Rule) Get(ctx *gin.Context) {
 	var (
@@ -140,6 +143,7 @@ func (*_Rule) Get(ctx *gin.Context) {
 // @Param id query string true "Rule ID"
 // @Param param body models.Rule true "Request Body"
 // @Success 200 {object} models.Response
+// @Failure 400 {object} models.Response
 // @Router /api/v1/rule [put]
 func (*_Rule) Put(ctx *gin.Context) {
 	var (
