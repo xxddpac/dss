@@ -55,3 +55,15 @@ func (*_Port) Clear(ctx *gin.Context) {
 func (*_Port) Trend(ctx *gin.Context) {
 	//todo
 }
+
+func (*_Port) Location(ctx *gin.Context) {
+	var (
+		g = models.Gin{Ctx: ctx}
+	)
+	resp, err := management.PortManager.Location()
+	if err != nil {
+		g.Fail(http.StatusBadRequest, err)
+		return
+	}
+	g.Success(resp)
+}

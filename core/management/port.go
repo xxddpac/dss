@@ -23,6 +23,9 @@ func (*_PortManager) Get(param models.ScanQuery) (interface{}, error) {
 		query  = bson.M{}
 		repo   = dao.Repository{Collection: "port_scan"}
 	)
+	if param.Location != "" {
+		query["location"] = param.Location
+	}
 	if param.Date != "" {
 		query["done_time"] = param.Date
 	} else {
@@ -50,5 +53,31 @@ func (*_PortManager) Get(param models.ScanQuery) (interface{}, error) {
 	result.Total = repo.Count(query)
 	result.Items = models.ScanQueryResultFunc(resp)
 	result.Pages = int(math.Ceil(float64(result.Total) / float64(param.Size)))
+	return result, nil
+}
+
+func (*_PortManager) LocationGroupBy() (pipeline []bson.M) {
+	group := bson.M{"$group": bson.M{"_id": "$location", "count": bson.M{"$sum": 1}}}
+	orderBy := bson.M{"$sort": bson.M{"count": -1}}
+	pipeline = []bson.M{group, orderBy}
+	return
+}
+
+func (*_PortManager) Location() (interface{}, error) {
+	var (
+		resp, pipeline []bson.M
+		result         []string
+		repo           = dao.Repository{Collection: "port_scan"}
+	)
+	pipeline = PortManager.LocationGroupBy()
+	if err := repo.Aggregate(pipeline, &resp); err != nil {
+		return nil, err
+	}
+	for _, item := range resp {
+		if _, ok := item["_id"].(string); !ok {
+			continue
+		}
+		result = append(result, item["_id"].(string))
+	}
 	return result, nil
 }

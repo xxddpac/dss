@@ -30,8 +30,9 @@ func ScanInsertFunc(s Scan) *ScanInsert {
 
 type ScanQuery struct {
 	QueryPage
-	Date   string `form:"date"`
-	Search string `form:"search"`
+	Date     string `form:"date"`
+	Location string `form:"location"`
+	Search   string `form:"search"`
 }
 
 func ScanQueryFunc() *ScanQuery {

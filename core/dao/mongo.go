@@ -77,3 +77,12 @@ func (r *Repository) UpdateById(id interface{}, update interface{}) error {
 	defer client.Close()
 	return client.Collection().UpdateId(id, update)
 }
+
+func (r *Repository) Aggregate(query []bson.M, resp interface{}) error {
+	client := mongo.GetConn(r.Collection)
+	defer client.Close()
+	if err := client.Collection().Pipe(query).All(resp); err != nil {
+		return err
+	}
+	return nil
+}
