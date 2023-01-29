@@ -65,32 +65,34 @@ func (*_PortManager) FieldGroupBy(field string) (pipeline []bson.M) {
 	return
 }
 
-func (*_PortManager) Location() (interface{}, error) {
-	var (
-		err            error
-		field          = "location"
-		resp, pipeline []bson.M
-		result         []string
-		repo           = dao.Repository{Collection: "port_scan"}
-	)
-	pipeline = PortManager.FieldGroupBy(field)
-	if err = repo.Aggregate(pipeline, &resp); err != nil {
-		return nil, err
-	}
+func (*_PortManager) Parse(resp []bson.M) (result []string) {
 	for _, item := range resp {
 		if _, ok := item["_id"].(string); !ok {
 			continue
 		}
 		result = append(result, item["_id"].(string))
 	}
-	return result, nil
+	return
+}
+
+func (*_PortManager) Location() (interface{}, error) {
+	var (
+		err            error
+		field          = "location"
+		resp, pipeline []bson.M
+		repo           = dao.Repository{Collection: "port_scan"}
+	)
+	pipeline = PortManager.FieldGroupBy(field)
+	if err = repo.Aggregate(pipeline, &resp); err != nil {
+		return nil, err
+	}
+	return PortManager.Parse(resp), nil
 }
 
 func (*_PortManager) Clear() {
 	var (
 		err            error
 		field          = "done_time"
-		result         []string
 		resp, pipeline []bson.M
 		repo           = dao.Repository{Collection: "port_scan"}
 	)
@@ -99,18 +101,14 @@ func (*_PortManager) Clear() {
 		log.Errorf("group by field err:%v", err)
 		return
 	}
-	for _, item := range resp {
-		if _, ok := item["_id"].(string); !ok {
-			continue
-		}
-		result = append(result, item["_id"].(string))
+	result := PortManager.Parse(resp)
+	if len(result) <= 7 {
+		return
 	}
-	if len(result) > 7 {
-		result = result[:len(result)-7]
-		for _, item := range result {
-			if err = repo.RemoveAll(bson.M{field: item}); err != nil {
-				log.Errorf("remove field err:%v", err)
-			}
+	result = result[:len(result)-7]
+	for _, item := range result {
+		if err = repo.RemoveAll(bson.M{field: item}); err != nil {
+			log.Errorf("remove field err:%v", err)
 		}
 	}
 }
@@ -119,7 +117,6 @@ func (*_PortManager) Trend() (interface{}, error) {
 	var (
 		err            error
 		field          = "done_time"
-		res            []string
 		resp, pipeline []bson.M
 		repo           = dao.Repository{Collection: "port_scan"}
 		result         []map[string]interface{}
@@ -128,12 +125,7 @@ func (*_PortManager) Trend() (interface{}, error) {
 	if err = repo.Aggregate(pipeline, &resp); err != nil {
 		return nil, err
 	}
-	for _, item := range resp {
-		if _, ok := item["_id"].(string); !ok {
-			continue
-		}
-		res = append(res, item["_id"].(string))
-	}
+	res := PortManager.Parse(resp)
 	if len(res) > 7 {
 		res = res[len(res)-7:]
 	}
