@@ -1,9 +1,11 @@
 package management
 
 import (
+	"dss/common/log"
 	"dss/common/utils"
 	"dss/core/dao"
 	"dss/core/models"
+	"fmt"
 	"github.com/globalsign/mgo/bson"
 	"math"
 	"time"
@@ -56,21 +58,23 @@ func (*_PortManager) Get(param models.ScanQuery) (interface{}, error) {
 	return result, nil
 }
 
-func (*_PortManager) LocationGroupBy() (pipeline []bson.M) {
-	group := bson.M{"$group": bson.M{"_id": "$location", "count": bson.M{"$sum": 1}}}
-	orderBy := bson.M{"$sort": bson.M{"count": -1}}
+func (*_PortManager) FieldGroupBy(field string) (pipeline []bson.M) {
+	group := bson.M{"$group": bson.M{"_id": fmt.Sprintf("$%s", field), "count": bson.M{"$sum": 1}}}
+	orderBy := bson.M{"$sort": bson.M{"count": 1}}
 	pipeline = []bson.M{group, orderBy}
 	return
 }
 
 func (*_PortManager) Location() (interface{}, error) {
 	var (
+		err            error
+		field          = "location"
 		resp, pipeline []bson.M
 		result         []string
 		repo           = dao.Repository{Collection: "port_scan"}
 	)
-	pipeline = PortManager.LocationGroupBy()
-	if err := repo.Aggregate(pipeline, &resp); err != nil {
+	pipeline = PortManager.FieldGroupBy(field)
+	if err = repo.Aggregate(pipeline, &resp); err != nil {
 		return nil, err
 	}
 	for _, item := range resp {
@@ -80,4 +84,33 @@ func (*_PortManager) Location() (interface{}, error) {
 		result = append(result, item["_id"].(string))
 	}
 	return result, nil
+}
+
+func (*_PortManager) Clear() {
+	var (
+		err            error
+		field          = "done_time"
+		result         []string
+		resp, pipeline []bson.M
+		repo           = dao.Repository{Collection: "port_scan"}
+	)
+	pipeline = PortManager.FieldGroupBy(field)
+	if err = repo.Aggregate(pipeline, &resp); err != nil {
+		log.Errorf("group by field err:%v", err)
+		return
+	}
+	for _, item := range resp {
+		if _, ok := item["_id"].(string); !ok {
+			continue
+		}
+		result = append(result, item["_id"].(string))
+	}
+	if len(result) > 7 {
+		result = result[:len(result)-7]
+		for _, item := range result {
+			if err = repo.RemoveAll(bson.M{field: item}); err != nil {
+				log.Errorf("remove field err:%v", err)
+			}
+		}
+	}
 }

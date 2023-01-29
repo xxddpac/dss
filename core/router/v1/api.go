@@ -24,6 +24,6 @@ func Register(v1 *gin.RouterGroup) {
 		port.GET("Stats", Port.Stats)       // last 7 days scan result stats
 		port.GET("remind", Port.Remind)     // send notification if new port open  (schedule)
 		port.GET("location", Port.Location) // location select from web front
-		port.DELETE("clear", Port.Clear)    // save last 7 days result (schedule)
+		port.GET("clear", Port.Clear)       // save last 7 days result (schedule)
 	}
 }

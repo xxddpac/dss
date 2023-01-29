@@ -86,3 +86,10 @@ func (r *Repository) Aggregate(query []bson.M, resp interface{}) error {
 	}
 	return nil
 }
+
+func (r *Repository) RemoveAll(query bson.M) error {
+	client := mongo.GetConn(r.Collection)
+	defer client.Close()
+	_, err := client.Collection().RemoveAll(query)
+	return err
+}

@@ -51,7 +51,11 @@ func (*_Port) Stats(ctx *gin.Context) {
 }
 
 func (*_Port) Clear(ctx *gin.Context) {
-	//todo
+	var (
+		g = models.Gin{Ctx: ctx}
+	)
+	go management.PortManager.Clear()
+	g.Success(nil)
 }
 
 func (*_Port) Trend(ctx *gin.Context) {
