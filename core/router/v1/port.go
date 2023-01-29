@@ -59,7 +59,15 @@ func (*_Port) Clear(ctx *gin.Context) {
 }
 
 func (*_Port) Trend(ctx *gin.Context) {
-	//todo
+	var (
+		g = models.Gin{Ctx: ctx}
+	)
+	resp, err := management.PortManager.Trend()
+	if err != nil {
+		g.Fail(http.StatusBadRequest, err)
+		return
+	}
+	g.Success(resp)
 }
 
 // Location

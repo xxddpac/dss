@@ -114,3 +114,34 @@ func (*_PortManager) Clear() {
 		}
 	}
 }
+
+func (*_PortManager) Trend() (interface{}, error) {
+	var (
+		err            error
+		field          = "done_time"
+		res            []string
+		resp, pipeline []bson.M
+		repo           = dao.Repository{Collection: "port_scan"}
+		result         []map[string]interface{}
+	)
+	pipeline = PortManager.FieldGroupBy(field)
+	if err = repo.Aggregate(pipeline, &resp); err != nil {
+		return nil, err
+	}
+	for _, item := range resp {
+		if _, ok := item["_id"].(string); !ok {
+			continue
+		}
+		res = append(res, item["_id"].(string))
+	}
+	if len(res) > 7 {
+		res = res[len(res)-7:]
+	}
+	for _, item := range res {
+		tmp := make(map[string]interface{})
+		tmp["date"] = item
+		tmp["count"] = repo.Count(bson.M{field: item})
+		result = append(result, tmp)
+	}
+	return result, nil
+}
