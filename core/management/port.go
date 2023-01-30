@@ -60,7 +60,7 @@ func (*_PortManager) Get(param models.ScanQuery) (interface{}, error) {
 
 func (*_PortManager) FieldGroupBy(field string) (pipeline []bson.M) {
 	group := bson.M{"$group": bson.M{"_id": fmt.Sprintf("$%s", field), "count": bson.M{"$sum": 1}}}
-	orderBy := bson.M{"$sort": bson.M{"count": 1}}
+	orderBy := bson.M{"$sort": bson.M{"_id": 1}}
 	pipeline = []bson.M{group, orderBy}
 	return
 }
