@@ -90,7 +90,7 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/models.Response'
-      summary: Clear and save data in last 7 days
+      summary: Clear data more than 7 days
       tags:
       - PortScan
   /api/v1/port/location:
@@ -242,6 +242,24 @@ paths:
           schema:
             $ref: '#/definitions/models.Response'
       summary: Modify Rule By ID
+      tags:
+      - Rule
+  /api/v1/rule/type/enum:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Display rule type enum
       tags:
       - Rule
   /api/v1/task:

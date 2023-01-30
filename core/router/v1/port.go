@@ -51,7 +51,7 @@ func (*_Port) Stats(ctx *gin.Context) {
 }
 
 // Clear
-// @Summary Clear and save data in last 7 days
+// @Summary Clear data more than 7 days
 // @Tags PortScan
 // @Accept  json
 // @Produce  json

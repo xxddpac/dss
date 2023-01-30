@@ -166,6 +166,14 @@ func (*_Rule) Put(ctx *gin.Context) {
 	g.Success(nil)
 }
 
+// Enum
+// @Summary Display rule type enum
+// @Tags Rule
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} models.Response
+// @Failure 400 {object} models.Response
+// @Router /api/v1/rule/type/enum [get]
 func (*_Rule) Enum(ctx *gin.Context) {
 	var (
 		g = models.Gin{Ctx: ctx}

@@ -96,7 +96,7 @@ var doc = `{
                 "tags": [
                     "PortScan"
                 ],
-                "summary": "Clear and save data in last 7 days",
+                "summary": "Clear data more than 7 days",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -329,6 +329,34 @@ var doc = `{
                         "required": true
                     }
                 ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/rule/type/enum": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Rule"
+                ],
+                "summary": "Display rule type enum",
                 "responses": {
                     "200": {
                         "description": "OK",
