@@ -165,3 +165,10 @@ func (*_Rule) Put(ctx *gin.Context) {
 	}
 	g.Success(nil)
 }
+
+func (*_Rule) Enum(ctx *gin.Context) {
+	var (
+		g = models.Gin{Ctx: ctx}
+	)
+	g.Success(management.RuleManager.Enum())
+}

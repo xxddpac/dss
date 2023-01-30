@@ -3,6 +3,7 @@ package management
 import (
 	"dss/common/utils"
 	"dss/core/dao"
+	"dss/core/global"
 	"dss/core/models"
 	"fmt"
 	"github.com/globalsign/mgo/bson"
@@ -81,4 +82,16 @@ func (*_RuleManager) Put(param models.QueryID, body models.Rule) error {
 		return err
 	}
 	return nil
+}
+
+func (*_RuleManager) Enum() interface{} {
+	var (
+		res = make(map[string][]map[string]interface{})
+	)
+	res["type"] = append(res["type"],
+		map[string]interface{}{"key": global.Single.String(), "value": global.Single},
+		map[string]interface{}{"key": global.Range.String(), "value": global.Range},
+		map[string]interface{}{"key": global.Cidr.String(), "value": global.Cidr},
+	)
+	return res
 }

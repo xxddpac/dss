@@ -6,10 +6,11 @@ func Register(v1 *gin.RouterGroup) {
 	// this rule defines the scanning host and port
 	rule := v1.Group("/rule")
 	{
-		rule.POST("", Rule.Post)     // add rule
-		rule.GET("", Rule.Get)       // list rule
-		rule.PUT("", Rule.Put)       // modify rule
-		rule.DELETE("", Rule.Delete) // delete rule
+		rule.POST("", Rule.Post)          // add rule
+		rule.GET("", Rule.Get)            // list rule
+		rule.PUT("", Rule.Put)            // modify rule
+		rule.DELETE("", Rule.Delete)      // delete rule
+		rule.GET("/type/enum", Rule.Enum) // display rule type enum
 	}
 	// task scheduler
 	task := v1.Group("/task")
