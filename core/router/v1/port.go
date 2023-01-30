@@ -50,6 +50,14 @@ func (*_Port) Stats(ctx *gin.Context) {
 	//todo
 }
 
+// Clear
+// @Summary Clear and save data in last 7 days
+// @Tags PortScan
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} models.Response
+// @Failure 400 {object} models.Response
+// @Router /api/v1/port/clear [delete]
 func (*_Port) Clear(ctx *gin.Context) {
 	var (
 		g = models.Gin{Ctx: ctx}
@@ -58,6 +66,14 @@ func (*_Port) Clear(ctx *gin.Context) {
 	g.Success(nil)
 }
 
+// Trend
+// @Summary last 7 days scan trend
+// @Tags PortScan
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} models.Response
+// @Failure 400 {object} models.Response
+// @Router /api/v1/port/trend [get]
 func (*_Port) Trend(ctx *gin.Context) {
 	var (
 		g = models.Gin{Ctx: ctx}
