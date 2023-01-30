@@ -43,7 +43,11 @@ func (*_Port) Get(ctx *gin.Context) {
 }
 
 func (*_Port) Remind(ctx *gin.Context) {
-	//todo
+	var (
+		g = models.Gin{Ctx: ctx}
+	)
+	go management.PortManager.Remind()
+	g.Success(nil)
 }
 
 func (*_Port) Stats(ctx *gin.Context) {

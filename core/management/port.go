@@ -137,3 +137,47 @@ func (*_PortManager) Trend() (interface{}, error) {
 	}
 	return result, nil
 }
+
+func (*_PortManager) Remind() {
+	var (
+		s                                    []models.Scan
+		err                                  error
+		todayScanResult, yesterdayScanResult []string
+		check                                func(todayScanResult, yesterdayScanResult []string)
+		query                                = bson.M{}
+		repo                                 = dao.Repository{Collection: "port_scan"}
+		todayTimeLayout                      = time.Now().Format(utils.TimeLayout)
+		yesterdayTimeLayout                  = time.Now().AddDate(0, 0, -1).Format(utils.TimeLayout)
+	)
+	query["done_time"] = bson.M{"$in": []string{todayTimeLayout, yesterdayTimeLayout}}
+	if err = repo.Select(query, &s); err != nil {
+		log.Errorf("select data err:%v", err)
+		return
+	}
+	for _, item := range s {
+		if todayTimeLayout == item.DoneTime {
+			todayScanResult = append(todayScanResult, fmt.Sprintf("%s-%s", item.Host, item.Port))
+		} else {
+			yesterdayScanResult = append(yesterdayScanResult, fmt.Sprintf("%s-%s", item.Host, item.Port))
+		}
+	}
+	if len(todayScanResult) == 0 || len(yesterdayScanResult) == 0 {
+		log.Infof("no data found in today or yesterday")
+		return
+	}
+	defer func() {
+		check(todayScanResult, yesterdayScanResult)
+	}()
+	check = func(todayScanResult, yesterdayScanResult []string) {
+		var newOpenPortSlice []string
+		for _, item := range todayScanResult {
+			if !utils.IsStrExists(yesterdayScanResult, item) {
+				newOpenPortSlice = append(newOpenPortSlice, item)
+			}
+		}
+		if len(newOpenPortSlice) == 0 {
+			return
+		}
+		// todo notify
+	}
+}

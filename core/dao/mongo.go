@@ -93,3 +93,12 @@ func (r *Repository) RemoveAll(query bson.M) error {
 	_, err := client.Collection().RemoveAll(query)
 	return err
 }
+
+func (r *Repository) Select(query bson.M, result interface{}) error {
+	client := mongo.GetConn(r.Collection)
+	defer client.Close()
+	if err := client.Collection().Find(query).All(result); err != nil {
+		return err
+	}
+	return nil
+}
