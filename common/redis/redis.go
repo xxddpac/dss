@@ -27,7 +27,7 @@ func Init(cfg *Config) error {
 		WriteTimeout: time.Duration(cfg.WriteTimeout) * time.Millisecond,
 		PoolSize:     cfg.PoolSize,
 		PoolTimeout:  time.Duration(cfg.PoolTimeout) * time.Second,
-		MinIdleConns: cfg.MinIdleConns,
+		MinIdleConns: cfg.MinIdleConnS,
 		MaxRetries:   cfg.MaxRetries,
 	})
 

@@ -6,15 +6,14 @@ import (
 )
 
 const (
-	MaxDialTimeout  = 1000 // millisecond
-	MaxReadTimeout  = 1000 // millisecond
-	MaxWriteTimeout = 3000 // millisecond
-	MaxPoolTimeout  = 2    // second
-	MinIdleConns    = 3
+	MaxDialTimeout  = 1000
+	MaxReadTimeout  = 1000
+	MaxWriteTimeout = 3000
+	MaxPoolTimeout  = 2
+	MinIdleConnS    = 3
 	MaxRetries      = 1
 )
 
-// A Config of go redis
 type Config struct {
 	Network              string
 	Addr                 string
@@ -25,17 +24,15 @@ type Config struct {
 	WriteTimeout         int
 	PoolSize             int
 	PoolTimeout          int
-	MinIdleConns         int
+	MinIdleConnS         int
 	MaxRetries           int
 	TraceIncludeNotFound bool
 }
 
-// Name returns client name of the config
 func (c *Config) Name() string {
 	return fmt.Sprintf("%s(%s/%d)", c.Network, c.Addr, c.DB)
 }
 
-// FillWithDefaults apply default values for fields with invalid values.
 func (c *Config) FillWithDefaults() {
 	if c.DialTimeout <= 0 {
 		c.DialTimeout = MaxDialTimeout
@@ -57,8 +54,8 @@ func (c *Config) FillWithDefaults() {
 		c.PoolTimeout = MaxPoolTimeout
 	}
 
-	if c.MinIdleConns <= 0 {
-		c.MinIdleConns = MinIdleConns
+	if c.MinIdleConnS <= 0 {
+		c.MinIdleConnS = MinIdleConnS
 	}
 
 	if c.MaxRetries < 0 {
