@@ -3,6 +3,7 @@ package utils
 import (
 	"encoding/json"
 	"net"
+	"os"
 	"strconv"
 	"time"
 )
@@ -74,4 +75,12 @@ func IsStrExists(slice []string, str string) bool {
 		}
 	}
 	return false
+}
+
+func Exists(path string) bool {
+	_, err := os.Stat(path)
+	if os.IsNotExist(err) {
+		return false
+	}
+	return true
 }

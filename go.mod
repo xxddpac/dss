@@ -11,6 +11,7 @@ require (
 	github.com/spf13/cobra v1.6.1
 	github.com/swaggo/gin-swagger v1.3.1
 	github.com/swaggo/swag v1.5.1
+	github.com/tealeg/xlsx v1.0.5
 	go.uber.org/zap v1.24.0
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0
 )

@@ -155,10 +155,11 @@ func (*_PortManager) Remind() {
 		return
 	}
 	for _, item := range s {
+		hostPort := fmt.Sprintf("%s-%s", item.Host, item.Port)
 		if todayTimeLayout == item.DoneTime {
-			todayScanResult = append(todayScanResult, fmt.Sprintf("%s-%s", item.Host, item.Port))
+			todayScanResult = append(todayScanResult, hostPort)
 		} else {
-			yesterdayScanResult = append(yesterdayScanResult, fmt.Sprintf("%s-%s", item.Host, item.Port))
+			yesterdayScanResult = append(yesterdayScanResult, hostPort)
 		}
 	}
 	if len(todayScanResult) == 0 || len(yesterdayScanResult) == 0 {
