@@ -2,12 +2,12 @@ package errors
 
 import "fmt"
 
-func NewBusinessError(defaultMessage string, code int) BusinessError {
-	return BusinessError{
-		DefaultMessage: defaultMessage,
-		Code:           code,
-	}
-}
+//func NewBusinessError(defaultMessage string, code int) BusinessError {
+//	return BusinessError{
+//		DefaultMessage: defaultMessage,
+//		Code:           code,
+//	}
+//}
 
 type BusinessError struct {
 	DefaultMessage string `Json:"default message"`
