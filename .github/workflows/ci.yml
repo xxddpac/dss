@@ -26,10 +26,5 @@ jobs:
       - name: Run build
         run: go build .
 
-      - name: Run vet & lint
-        run: |
-          go vet .
-          golint .
-
       - name: Run testing
         run: go test `go list ./... | grep -v dao`

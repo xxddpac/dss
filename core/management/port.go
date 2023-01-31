@@ -162,7 +162,7 @@ func (*_PortManager) Remind() {
 		}
 	}
 	if len(todayScanResult) == 0 || len(yesterdayScanResult) == 0 {
-		log.Infof("no data found in today or yesterday")
+		log.InfoF("no data found in today or yesterday")
 		return
 	}
 	defer func() {

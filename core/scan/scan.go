@@ -58,7 +58,7 @@ func (s *scanInfo) Do() {
 	client, err := net.DialTimeout("tcp", fmt.Sprintf("%v:%v", s.Host, s.Port), timeout*time.Second)
 	if err == nil {
 		_ = client.Close()
-		log.Infof("found host:%s open port:%s", s.Host, s.Port)
+		log.InfoF("found host:%s open port:%s", s.Host, s.Port)
 		queue <- *s
 	}
 }
@@ -88,7 +88,7 @@ func store() {
 				log.Errorf("insert data to mongo err:", err)
 				continue
 			}
-			log.Infof("success insert data to mongo,total:%d", len(resp))
+			log.InfoF("success insert data to mongo,total:%d", len(resp))
 			result = append(result[:0], result[len(result):]...)
 		case msg := <-queue:
 			result = append(result, msg)

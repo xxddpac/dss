@@ -2,12 +2,12 @@ package log
 
 import (
 	"fmt"
-	"io"
-	"os"
-	"sync"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
+	"io"
+	"os"
+	"sync"
 )
 
 var (
@@ -16,16 +16,11 @@ var (
 )
 
 const (
-	// FormatText format log text
-	FormatText = "text"
-	// FormatJSON format log json
+	FormatText           = "text"
 	FormatJSON           = "json"
 	DefaultLogTimeLayout = "2006-01-02 15:04:05.000"
 )
 
-// type Level uint
-
-// 日志配置
 type Config struct {
 	LogPath    string
 	LogLevel   string
@@ -60,28 +55,27 @@ func newLogWriter(logPath string, maxSize, maxBackups, maxAge int, compress bool
 		return os.Stdout
 	}
 	return &lumberjack.Logger{
-		Filename:   logPath,    // 日志文件路径
-		MaxSize:    maxSize,    // 每个日志文件保存的最大尺寸 单位：M
-		MaxBackups: maxBackups, // 日志文件最多保存多少个备份
-		MaxAge:     maxAge,     // 文件最多保存多少天
-		Compress:   compress,   // 是否压缩
+		Filename:   logPath,
+		MaxSize:    maxSize,
+		MaxBackups: maxBackups,
+		MaxAge:     maxAge,
+		Compress:   compress,
 	}
 }
 
 func newZapEncoder() zapcore.EncoderConfig {
 	encoderConfig := zapcore.EncoderConfig{
-		TimeKey:       "timestamp",
-		LevelKey:      "level",
-		NameKey:       "logger",
-		CallerKey:     "line",
-		MessageKey:    "message",
-		StacktraceKey: "stacktrace",
-		LineEnding:    zapcore.DefaultLineEnding,
-		EncodeLevel:   zapcore.LowercaseLevelEncoder, // 小写编码器
-		//EncodeTime:     zapcore.ISO8601TimeEncoder,     // ISO8601 UTC 时间格式
+		TimeKey:        "timestamp",
+		LevelKey:       "level",
+		NameKey:        "logger",
+		CallerKey:      "line",
+		MessageKey:     "message",
+		StacktraceKey:  "stacktrace",
+		LineEnding:     zapcore.DefaultLineEnding,
+		EncodeLevel:    zapcore.LowercaseLevelEncoder,
 		EncodeTime:     zapcore.TimeEncoderOfLayout(DefaultLogTimeLayout),
-		EncodeDuration: zapcore.SecondsDurationEncoder, //
-		EncodeCaller:   zapcore.ShortCallerEncoder,     // 全路径编码器
+		EncodeDuration: zapcore.SecondsDurationEncoder,
+		EncodeCaller:   zapcore.ShortCallerEncoder,
 		EncodeName:     zapcore.FullNameEncoder,
 	}
 	return encoderConfig
@@ -110,21 +104,18 @@ func newLoggerCore(cfg *Config) zapcore.Core {
 }
 
 func newLoggerOptions() []zap.Option {
-	// 开启开发模式，堆栈跟踪
 	caller := zap.AddCaller()
-	callerskip := zap.AddCallerSkip(1)
-	// 开发者
+	callerSkip := zap.AddCallerSkip(1)
 	development := zap.Development()
 	options := []zap.Option{
 		caller,
-		callerskip,
+		callerSkip,
 		development,
-		zap.Fields(zap.String("project_name", "security")),
+		zap.Fields(zap.String("project_name", "dss")),
 	}
 	return options
 }
 
-// fill default config
 func (c *Config) fillWithDefault() {
 	if c.MaxSize <= 0 {
 		c.MaxSize = 20
@@ -143,7 +134,6 @@ func (c *Config) fillWithDefault() {
 	}
 }
 
-// InitLog config
 func Init(cfg *Config) {
 	cfg.fillWithDefault()
 	core := newLoggerCore(cfg)
@@ -155,13 +145,11 @@ func Logger() *zap.Logger {
 	return _logger
 }
 
-// Debug output log
 func Debug(msg string, fields ...zap.Field) {
 	_logger.Debug(msg, fields...)
 }
 
-// Debugf logs a debug message.
-func Debugf(msg string, args ...interface{}) {
+func DebugF(msg string, args ...interface{}) {
 	lock.Lock()
 	defer lock.Unlock()
 
@@ -171,13 +159,11 @@ func Debugf(msg string, args ...interface{}) {
 	_logger.Debug(msg)
 }
 
-// Info output log
 func Info(msg string, fields ...zap.Field) {
 	_logger.Info(msg, fields...)
 }
 
-// Infof logs an info message.
-func Infof(msg string, args ...interface{}) {
+func InfoF(msg string, args ...interface{}) {
 	lock.Lock()
 	defer lock.Unlock()
 
@@ -187,13 +173,11 @@ func Infof(msg string, args ...interface{}) {
 	_logger.Info(msg)
 }
 
-// Warn output log
 func Warn(msg string, fields ...zap.Field) {
 	_logger.Warn(msg, fields...)
 }
 
-// Warnf logs an error message.
-func Warnf(msg string, args ...interface{}) {
+func WarnF(msg string, args ...interface{}) {
 	lock.Lock()
 	defer lock.Unlock()
 
@@ -203,12 +187,10 @@ func Warnf(msg string, args ...interface{}) {
 	_logger.Warn(msg)
 }
 
-// Error output log
 func Error(msg string, fields ...zap.Field) {
 	_logger.Error(msg, fields...)
 }
 
-// Errorf logs an error message.
 func Errorf(msg string, args ...interface{}) {
 	lock.Lock()
 	defer lock.Unlock()
@@ -219,12 +201,10 @@ func Errorf(msg string, args ...interface{}) {
 	_logger.Error(msg)
 }
 
-// Panic output panic
 func Panic(msg string, fields ...zap.Field) {
 	_logger.Panic(msg, fields...)
 }
 
-// Fatal output log
 func Fatal(msg string, fields ...zap.Field) {
 	_logger.Fatal(msg, fields...)
 }
