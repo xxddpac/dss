@@ -111,6 +111,25 @@ paths:
       summary: GroupBy Location
       tags:
       - PortScan
+  /api/v1/port/remind:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Compare yesterday with today,if new port open in today will notify
+        by workChat
+      tags:
+      - PortScan
   /api/v1/port/trend:
     get:
       consumes:

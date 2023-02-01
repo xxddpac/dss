@@ -141,6 +141,34 @@ var doc = `{
                 }
             }
         },
+        "/api/v1/port/remind": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "PortScan"
+                ],
+                "summary": "Compare yesterday with today,if new port open in today will notify by workChat",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/port/trend": {
             "get": {
                 "consumes": [

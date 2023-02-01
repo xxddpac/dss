@@ -42,6 +42,14 @@ func (*_Port) Get(ctx *gin.Context) {
 	g.Success(resp)
 }
 
+// Remind
+// @Summary Compare yesterday with today,if new port open in today will notify by workChat
+// @Tags PortScan
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} models.Response
+// @Failure 400 {object} models.Response
+// @Router /api/v1/port/remind [get]
 func (*_Port) Remind(ctx *gin.Context) {
 	var (
 		g = models.Gin{Ctx: ctx}
