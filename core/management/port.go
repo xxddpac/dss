@@ -29,6 +29,8 @@ type _PortManager struct {
 }
 
 type ErrInfo struct {
+	// `fix typo in word with 2 json tags`
+	//  Goland -> Settings -> Editor -> Natural Languages -> Spelling -> Accepted words
 	ErrCode int    `json:"errcode"`
 	ErrMsg  string `json:"errmsg"`
 }
