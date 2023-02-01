@@ -45,3 +45,5 @@ TimeOut = 3
 [producer]
 Port = 9091
 Mode = "release"
+WorkChatUploadUrl = "https://qyapi.weixin.qq.com/cgi-bin/webhook/upload_media?key=Your-Key&type=file"
+WorkChatBotUrl = "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=Your-Key"

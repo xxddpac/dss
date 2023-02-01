@@ -39,6 +39,8 @@ type Consumer struct {
 }
 
 type Producer struct {
-	Port int
-	Mode string
+	Port              int
+	Mode              string
+	WorkChatUploadUrl string
+	WorkChatBotUrl    string
 }

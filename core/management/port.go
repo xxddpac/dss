@@ -1,13 +1,23 @@
 package management
 
 import (
+	"bytes"
+	"context"
+	"dss/common/http"
 	"dss/common/log"
 	"dss/common/utils"
+	"dss/core/config"
 	"dss/core/dao"
 	"dss/core/models"
+	"encoding/json"
 	"fmt"
 	"github.com/globalsign/mgo/bson"
+	"io"
 	"math"
+	"mime/multipart"
+	"os"
+	"path/filepath"
+	"strings"
 	"time"
 )
 
@@ -16,6 +26,11 @@ var (
 )
 
 type _PortManager struct {
+}
+
+type ErrInfo struct {
+	ErrCode int    `json:"errcode"`
+	ErrMsg  string `json:"errmsg"`
 }
 
 func (*_PortManager) Get(param models.ScanQuery) (interface{}, error) {
@@ -170,15 +185,122 @@ func (*_PortManager) Remind() {
 		check(todayScanResult, yesterdayScanResult)
 	}()
 	check = func(todayScanResult, yesterdayScanResult []string) {
-		var newOpenPortSlice []string
+		var (
+			key              string
+			newOpenItemSlice []string
+			preInsertXlsx    [][]string
+			header           = []string{"host", "port", "date"}
+			headers          map[string]string
+			body             io.Reader
+			xlsxName         = fmt.Sprintf("new_port_open_%s.xlsx", time.Now().Format(utils.TimeLayout))
+			filePath         = filepath.Join(os.TempDir(), xlsxName)
+		)
 		for _, item := range todayScanResult {
 			if !utils.IsStrExists(yesterdayScanResult, item) {
-				newOpenPortSlice = append(newOpenPortSlice, item)
+				newOpenItemSlice = append(newOpenItemSlice, item)
 			}
 		}
-		if len(newOpenPortSlice) == 0 {
+		if len(newOpenItemSlice) == 0 {
 			return
 		}
-		// todo notify
+		for _, item := range newOpenItemSlice {
+			data := strings.Split(item, "-")
+			if len(data) != 2 {
+				continue
+			}
+			host := data[0]
+			port := data[1]
+			preInsertXlsx = append(preInsertXlsx, []string{host, port, time.Now().Format(utils.TimeLayout)})
+		}
+		if err = utils.WriteToXlsx(filePath, header, preInsertXlsx); err != nil {
+			log.Errorf("write data to xlsx err:%v", err)
+			return
+		}
+		defer func() {
+			if err = os.Remove(filePath); err != nil {
+				log.Errorf("remove tmp file %v err:%v", filePath, err)
+			}
+		}()
+		headers, body, err = PortManager.buildMultipartFormData(filePath)
+		if err != nil {
+			log.Errorf("build multipart form_data err:%v", err)
+			return
+		}
+		key, err = PortManager.uploadFileToWorkChat(headers, body)
+		if err != nil {
+			log.Errorf("uploadFileToWorkChat err:%v", err)
+			return
+		}
+		if err = PortManager.notify(key); err != nil {
+			log.Errorf("notify err:%v", err)
+		}
 	}
+}
+
+func (*_PortManager) notify(key string) error {
+	var (
+		err            error
+		workChatBotUrl = config.CoreConf.Producer.WorkChatBotUrl
+		request        = http.NewClient(workChatBotUrl)
+	)
+	body := fmt.Sprintf(`{"msgtype":"file","file": {"media_id": "%v"}}`, key)
+	_, _, err = request.Post(context.Background(), "", body)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (*_PortManager) uploadFileToWorkChat(headers map[string]string, body io.Reader) (string, error) {
+	type uploadFile struct {
+		MediaId string `json:"media_id"`
+		ErrInfo
+	}
+	var (
+		u                 uploadFile
+		workChatUploadUrl = config.CoreConf.Producer.WorkChatUploadUrl
+		request           = http.NewClient(workChatUploadUrl, headers)
+	)
+	_, byteStr, err := request.Post(context.Background(), "", body)
+	if err != nil {
+		return "", err
+	}
+	if err = json.Unmarshal(byteStr, &u); err != nil {
+		return "", err
+	}
+	if u.ErrCode != 0 {
+		return "", fmt.Errorf("get media_id err,err_code:%d,err_msg:%v", u.ErrCode, u.ErrMsg)
+	}
+	return u.MediaId, nil
+}
+
+func (*_PortManager) buildMultipartFormData(path string) (map[string]string, io.Reader, error) {
+	var (
+		err       error
+		file      *os.File
+		part      io.Writer
+		fieldName = "media"
+	)
+	file, err = os.Open(path)
+	if err != nil {
+		return nil, nil, err
+	}
+	defer func() {
+		if err = file.Close(); err != nil {
+			panic(err)
+		}
+	}()
+	body := &bytes.Buffer{}
+	writer := multipart.NewWriter(body)
+	part, err = writer.CreateFormFile(fieldName, filepath.Base(path))
+	if err != nil {
+		return nil, nil, err
+	}
+	if _, err = io.Copy(part, file); err != nil {
+		return nil, nil, err
+	}
+	if err = writer.Close(); err != nil {
+		return nil, nil, err
+	}
+	return map[string]string{"Content-Type": writer.FormDataContentType()}, body, nil
 }
