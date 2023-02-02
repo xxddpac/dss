@@ -58,10 +58,6 @@ func (*_Port) Remind(ctx *gin.Context) {
 	g.Success(nil)
 }
 
-func (*_Port) Stats(ctx *gin.Context) {
-	//todo
-}
-
 // Clear
 // @Summary Clear data more than 7 days
 // @Tags PortScan
