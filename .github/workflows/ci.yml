@@ -19,6 +19,9 @@ jobs:
           go-version: '1.19'
           cache: true
 
+      - name: Download dependencies
+        run: go mod download
+
       - name: Install dependencies
         run: |
           go version
