@@ -19,8 +19,11 @@ jobs:
           go-version: '1.19'
           cache: true
 
-      - name: Download dependencies
-        run: go mod download
+      - name: Remove unused dependencies
+        run: go mod tidy
+
+      - name: Verify dependencies
+        run: go mod verify
 
       - name: Install dependencies
         run: |
