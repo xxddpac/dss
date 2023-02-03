@@ -8,6 +8,7 @@ import (
 	"dss/common/utils"
 	"dss/core/config"
 	"dss/core/dao"
+	"dss/core/global"
 	"dss/core/models"
 	"encoding/json"
 	"fmt"
@@ -40,7 +41,6 @@ func (*_PortManager) Get(param models.ScanQuery) (interface{}, error) {
 		result models.ScanQueryResult
 		resp   []*models.ScanInsert
 		query  = bson.M{}
-		repo   = dao.Repository{Collection: "port_scan"}
 	)
 	if param.Location != "" {
 		query["location"] = param.Location
@@ -56,20 +56,20 @@ func (*_PortManager) Get(param models.ScanQuery) (interface{}, error) {
 			{"port": bson.M{"$regex": param.Search, "$options": "$i"}},
 		}
 	}
-	if err := repo.SelectWithPage(query, param.Page, param.Size, &resp, "-updated_time"); err != nil {
+	if err := dao.Repo(global.PortScan).SelectWithPage(query, param.Page, param.Size, &resp, "-updated_time"); err != nil {
 		return nil, err
 	}
 	if param.Date == "" {
 		if len(resp) == 0 {
 			query["done_time"] = time.Now().AddDate(0, 0, -1).Format(utils.TimeLayout)
-			if err := repo.SelectWithPage(query, param.Page, param.Size, &resp, "-updated_time"); err != nil {
+			if err := dao.Repo(global.PortScan).SelectWithPage(query, param.Page, param.Size, &resp, "-updated_time"); err != nil {
 				return nil, err
 			}
 		}
 	}
 	result.Size = param.Size
 	result.Page = param.Page
-	result.Total = repo.Count(query)
+	result.Total = dao.Repo(global.PortScan).Count(query)
 	result.Items = models.ScanQueryResultFunc(resp)
 	result.Pages = int(math.Ceil(float64(result.Total) / float64(param.Size)))
 	return result, nil
@@ -97,10 +97,9 @@ func (*_PortManager) Location() (interface{}, error) {
 		err            error
 		field          = "location"
 		resp, pipeline []bson.M
-		repo           = dao.Repository{Collection: "port_scan"}
 	)
 	pipeline = PortManager.FieldGroupBy(field)
-	if err = repo.Aggregate(pipeline, &resp); err != nil {
+	if err = dao.Repo(global.PortScan).Aggregate(pipeline, &resp); err != nil {
 		return nil, err
 	}
 	return PortManager.Parse(resp), nil
@@ -111,10 +110,9 @@ func (*_PortManager) Clear() {
 		err            error
 		field          = "done_time"
 		resp, pipeline []bson.M
-		repo           = dao.Repository{Collection: "port_scan"}
 	)
 	pipeline = PortManager.FieldGroupBy(field)
-	if err = repo.Aggregate(pipeline, &resp); err != nil {
+	if err = dao.Repo(global.PortScan).Aggregate(pipeline, &resp); err != nil {
 		log.Errorf("group by field err:%v", err)
 		return
 	}
@@ -124,7 +122,7 @@ func (*_PortManager) Clear() {
 	}
 	result = result[:len(result)-7]
 	for _, item := range result {
-		if err = repo.RemoveAll(bson.M{field: item}); err != nil {
+		if err = dao.Repo(global.PortScan).RemoveAll(bson.M{field: item}); err != nil {
 			log.Errorf("remove field err:%v", err)
 		}
 	}
@@ -135,11 +133,10 @@ func (*_PortManager) Trend() (interface{}, error) {
 		err            error
 		field          = "done_time"
 		resp, pipeline []bson.M
-		repo           = dao.Repository{Collection: "port_scan"}
 		result         []map[string]interface{}
 	)
 	pipeline = PortManager.FieldGroupBy(field)
-	if err = repo.Aggregate(pipeline, &resp); err != nil {
+	if err = dao.Repo(global.PortScan).Aggregate(pipeline, &resp); err != nil {
 		return nil, err
 	}
 	res := PortManager.Parse(resp)
@@ -149,7 +146,7 @@ func (*_PortManager) Trend() (interface{}, error) {
 	for _, item := range res {
 		tmp := make(map[string]interface{})
 		tmp["date"] = item
-		tmp["count"] = repo.Count(bson.M{field: item})
+		tmp["count"] = dao.Repo(global.PortScan).Count(bson.M{field: item})
 		result = append(result, tmp)
 	}
 	return result, nil
@@ -162,12 +159,11 @@ func (*_PortManager) Remind() {
 		todayScanResult, yesterdayScanResult []string
 		check                                func(todayScanResult, yesterdayScanResult []string)
 		query                                = bson.M{}
-		repo                                 = dao.Repository{Collection: "port_scan"}
 		todayTimeLayout                      = time.Now().Format(utils.TimeLayout)
 		yesterdayTimeLayout                  = time.Now().AddDate(0, 0, -1).Format(utils.TimeLayout)
 	)
 	query["done_time"] = bson.M{"$in": []string{todayTimeLayout, yesterdayTimeLayout}}
-	if err = repo.Select(query, &s); err != nil {
+	if err = dao.Repo(global.PortScan).Select(query, &s); err != nil {
 		log.Errorf("select data err:%v", err)
 		return
 	}

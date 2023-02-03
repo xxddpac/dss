@@ -20,7 +20,6 @@ var (
 	timeout time.Duration
 	result  = make([]scanInfo, 0)
 	queue   = make(chan scanInfo, 100)
-	repo    = dao.Repository{Collection: "port_scan"}
 )
 
 type scanInfo struct {
@@ -84,7 +83,7 @@ func store() {
 					DoneTime: time.Now().Format(utils.TimeLayout),
 				}))
 			}
-			if err := repo.BulkWrite(resp); err != nil {
+			if err := dao.Repo(global.PortScan).BulkWrite(resp); err != nil {
 				log.Errorf("insert data to mongo err:", err)
 				continue
 			}

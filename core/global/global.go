@@ -3,7 +3,9 @@ package global
 import "context"
 
 const (
-	ScanQueue = "port_scan"
+	ScanQueue    = "port_scan"
+	PortScan     = "port_scan"
+	PortScanRule = "port_scan_rule"
 )
 
 var (

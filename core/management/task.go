@@ -72,9 +72,8 @@ func (*_TaskManager) Post() {
 		val       string
 		err       error
 		ruleSlice []models.Rule
-		repo      = dao.Repository{Collection: "port_scan_rule"}
 	)
-	if err = repo.SelectAll(&ruleSlice); err != nil {
+	if err = dao.Repo(global.PortScanRule).SelectAll(&ruleSlice); err != nil {
 		log.Errorf("select rule err:%v", err)
 		return
 	}

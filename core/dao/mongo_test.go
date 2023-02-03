@@ -2,6 +2,7 @@ package dao
 
 import (
 	"dss/common/mongo"
+	"dss/core/global"
 	"dss/core/models"
 	"fmt"
 	"github.com/globalsign/mgo/bson"
@@ -25,7 +26,6 @@ func TestRepository_BulkWrite(t *testing.T) {
 		t.Fatal(err)
 	}
 	var resp []interface{}
-	repo := &Repository{"port_scan"}
 	resp = append(resp,
 		models.ScanInsertFunc(models.Scan{
 			Host: "1.1.1.1",
@@ -35,7 +35,7 @@ func TestRepository_BulkWrite(t *testing.T) {
 			Host: "1.1.1.2",
 			Port: "23",
 		}))
-	if err := repo.BulkWrite(resp); err != nil {
+	if err := Repo(global.PortScan).BulkWrite(resp); err != nil {
 		t.Fatal(err)
 	}
 }
@@ -44,8 +44,7 @@ func TestRepository_Insert(t *testing.T) {
 	if err := mongo.Init(fakeMongoConfig); err != nil {
 		t.Fatal(err)
 	}
-	repo := &Repository{"port_scan_rule"}
-	if err := repo.Insert(models.RuleInsertFunc(models.Rule{
+	if err := Repo(global.PortScanRule).Insert(models.RuleInsertFunc(models.Rule{
 		Name:       "test",
 		Status:     true,
 		TargetHost: "1.1.1.0/24",
@@ -59,11 +58,10 @@ func TestRepository_Select(t *testing.T) {
 	if err := mongo.Init(fakeMongoConfig); err != nil {
 		t.Fatal(err)
 	}
-	repo := &Repository{"port_scan_rule"}
 	var (
 		ruleSlice []models.Rule
 	)
-	if err := repo.SelectAll(&ruleSlice); err != nil {
+	if err := Repo(global.PortScanRule).SelectAll(&ruleSlice); err != nil {
 		t.Fatal(err)
 	}
 	fmt.Println(len(ruleSlice))
@@ -75,7 +73,6 @@ func TestRepository_Select(t *testing.T) {
 func TestRepository_Aggregate(t *testing.T) {
 	var (
 		resp []bson.M
-		repo = &Repository{"port_scan"}
 	)
 	if err := mongo.Init(fakeMongoConfig); err != nil {
 		t.Fatal(err)
@@ -83,7 +80,7 @@ func TestRepository_Aggregate(t *testing.T) {
 	group := bson.M{"$group": bson.M{"_id": "$location", "count": bson.M{"$sum": 1}}}
 	orderBy := bson.M{"$sort": bson.M{"count": 1}}
 	pipeline := []bson.M{group, orderBy}
-	if err := repo.Aggregate(pipeline, &resp); err != nil {
+	if err := Repo(global.PortScan).Aggregate(pipeline, &resp); err != nil {
 		t.Fatal(err)
 	}
 	fmt.Println(resp)
