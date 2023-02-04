@@ -237,14 +237,22 @@ func (*_PortManager) Remind() {
 
 func (*_PortManager) notify(key string) error {
 	var (
+		e              ErrInfo
+		byteStr        []byte
 		err            error
 		workChatBotUrl = config.CoreConf.Producer.WorkChatBotUrl
 		request        = http.NewClient(workChatBotUrl)
 	)
 	body := fmt.Sprintf(`{"msgtype":"file","file": {"media_id": "%v"}}`, key)
-	_, _, err = request.Post(context.Background(), "", body)
+	_, byteStr, err = request.Post(context.Background(), "", body)
 	if err != nil {
 		return err
+	}
+	if err = json.Unmarshal(byteStr, &e); err != nil {
+		return err
+	}
+	if e.ErrCode != 0 {
+		return fmt.Errorf(e.ErrMsg)
 	}
 	return nil
 }
