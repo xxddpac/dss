@@ -6,8 +6,8 @@ import (
 	_ "dss/core/swagger"
 	e "errors"
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
-	"github.com/swaggo/gin-swagger/swaggerFiles"
 	"net/http"
 )
 
