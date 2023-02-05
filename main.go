@@ -15,7 +15,7 @@ func init() {
 // @version 1.0
 // @description Distributed Scan Services API DOCS
 func main() {
-	rootCmd := &cobra.Command{Use: "PortScan"}
+	rootCmd := &cobra.Command{Use: "SecurityScan"}
 	rootCmd.AddCommand(cmd.Consumer())
 	rootCmd.AddCommand(cmd.Producer())
 	if err := rootCmd.Execute(); err != nil {

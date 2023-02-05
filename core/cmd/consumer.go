@@ -21,7 +21,7 @@ func Consumer() *cobra.Command {
 	)
 	cmdConsumer := &cobra.Command{
 		Use:   "consumer",
-		Short: "Start Run Port Scan Consumer",
+		Short: "Start Run Security Scan Consumer",
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(cfg) == 0 {
 				_ = cmd.Help()

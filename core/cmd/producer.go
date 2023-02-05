@@ -20,7 +20,7 @@ func Producer() *cobra.Command {
 	)
 	cmdConsumer := &cobra.Command{
 		Use:   "producer",
-		Short: "Start Run Port Scan Producer",
+		Short: "Start Run Security Scan Producer",
 		Run: func(cmd *cobra.Command, args []string) {
 			if len(cfg) == 0 {
 				_ = cmd.Help()
