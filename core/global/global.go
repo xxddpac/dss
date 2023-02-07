@@ -3,9 +3,13 @@ package global
 import "context"
 
 const (
-	ScanQueue    = "port_scan"
-	PortScan     = "port_scan"
-	PortScanRule = "port_scan_rule"
+	PortScanQueue = "port_scan"
+	Scan          = "scan"
+	ScanRule      = "scan_rule"
+	SSH           = "22"
+	REDIS         = "6379"
+	MYSQL         = "3306"
+	ROOT          = "root"
 )
 
 var (

@@ -58,20 +58,20 @@ func (*_PortManager) Get(param models.ScanQuery) (interface{}, error) {
 			{"port": bson.M{"$regex": param.Search, "$options": "$i"}},
 		}
 	}
-	if err := dao.Repo(global.PortScan).SelectWithPage(query, param.Page, param.Size, &resp, "-updated_time"); err != nil {
+	if err := dao.Repo(global.Scan).SelectWithPage(query, param.Page, param.Size, &resp, "-updated_time"); err != nil {
 		return nil, err
 	}
 	if param.Date == "" {
 		if len(resp) == 0 {
 			query[doneTime] = time.Now().AddDate(0, 0, -1).Format(utils.TimeLayout)
-			if err := dao.Repo(global.PortScan).SelectWithPage(query, param.Page, param.Size, &resp, "-updated_time"); err != nil {
+			if err := dao.Repo(global.Scan).SelectWithPage(query, param.Page, param.Size, &resp, "-updated_time"); err != nil {
 				return nil, err
 			}
 		}
 	}
 	result.Size = param.Size
 	result.Page = param.Page
-	result.Total = dao.Repo(global.PortScan).Count(query)
+	result.Total = dao.Repo(global.Scan).Count(query)
 	result.Items = models.ScanQueryResultFunc(resp)
 	result.Pages = int(math.Ceil(float64(result.Total) / float64(param.Size)))
 	return result, nil
@@ -100,7 +100,7 @@ func (*_PortManager) Location() (interface{}, error) {
 		resp, pipeline []bson.M
 	)
 	pipeline = PortManager.FieldGroupBy(location)
-	if err = dao.Repo(global.PortScan).Aggregate(pipeline, &resp); err != nil {
+	if err = dao.Repo(global.Scan).Aggregate(pipeline, &resp); err != nil {
 		return nil, err
 	}
 	return PortManager.Parse(resp), nil
@@ -112,7 +112,7 @@ func (*_PortManager) Clear() {
 		resp, pipeline []bson.M
 	)
 	pipeline = PortManager.FieldGroupBy(doneTime)
-	if err = dao.Repo(global.PortScan).Aggregate(pipeline, &resp); err != nil {
+	if err = dao.Repo(global.Scan).Aggregate(pipeline, &resp); err != nil {
 		log.Errorf("group by field err:%v", err)
 		return
 	}
@@ -122,7 +122,7 @@ func (*_PortManager) Clear() {
 	}
 	result = result[:len(result)-7]
 	for _, item := range result {
-		if err = dao.Repo(global.PortScan).RemoveAll(bson.M{doneTime: item}); err != nil {
+		if err = dao.Repo(global.Scan).RemoveAll(bson.M{doneTime: item}); err != nil {
 			log.Errorf("remove field err:%v", err)
 		}
 	}
@@ -135,7 +135,7 @@ func (*_PortManager) Trend() (interface{}, error) {
 		result         []map[string]interface{}
 	)
 	pipeline = PortManager.FieldGroupBy(doneTime)
-	if err = dao.Repo(global.PortScan).Aggregate(pipeline, &resp); err != nil {
+	if err = dao.Repo(global.Scan).Aggregate(pipeline, &resp); err != nil {
 		return nil, err
 	}
 	res := PortManager.Parse(resp)
@@ -145,7 +145,7 @@ func (*_PortManager) Trend() (interface{}, error) {
 	for _, item := range res {
 		tmp := make(map[string]interface{})
 		tmp["date"] = item
-		tmp["count"] = dao.Repo(global.PortScan).Count(bson.M{doneTime: item})
+		tmp["count"] = dao.Repo(global.Scan).Count(bson.M{doneTime: item})
 		result = append(result, tmp)
 	}
 	return result, nil
@@ -162,7 +162,7 @@ func (*_PortManager) Remind() {
 		yesterdayTimeLayout                  = time.Now().AddDate(0, 0, -1).Format(utils.TimeLayout)
 	)
 	query[doneTime] = bson.M{"$in": []string{todayTimeLayout, yesterdayTimeLayout}}
-	if err = dao.Repo(global.PortScan).Select(query, &s); err != nil {
+	if err = dao.Repo(global.Scan).Select(query, &s); err != nil {
 		log.Errorf("select data err:%v", err)
 		return
 	}

@@ -73,7 +73,7 @@ func (*_TaskManager) Post() {
 		err       error
 		ruleSlice []models.Rule
 	)
-	if err = dao.Repo(global.PortScanRule).SelectAll(&ruleSlice); err != nil {
+	if err = dao.Repo(global.ScanRule).SelectAll(&ruleSlice); err != nil {
 		log.Errorf("select rule err:%v", err)
 		return
 	}
@@ -86,7 +86,7 @@ func (*_TaskManager) Post() {
 				log.Errorf("Marshal json to str err:%v", err)
 				continue
 			}
-			if err = dao.Redis.LPush(global.ScanQueue, val); err != nil {
+			if err = dao.Redis.LPush(global.PortScanQueue, val); err != nil {
 				log.Errorf("push msg to redis err:%v", err)
 				continue
 			}
