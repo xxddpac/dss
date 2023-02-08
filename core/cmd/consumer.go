@@ -6,6 +6,7 @@ import (
 	"dss/common/redis"
 	"dss/core/config"
 	"dss/core/global"
+	"dss/core/host"
 	"dss/core/router"
 	"dss/core/scan"
 	"dss/core/server"
@@ -36,6 +37,7 @@ func Consumer() *cobra.Command {
 			if err := mongo.Init(&conf.Mongo); err != nil {
 				log.Fatal("Init mongo failed", zap.Error(err))
 			}
+			host.RefreshHost()
 			scan.Init(conf.Consumer.MaxWorkers, conf.Consumer.MaxQueue, log.Logger())
 			gin.SetMode(conf.Consumer.Mode)
 		},
