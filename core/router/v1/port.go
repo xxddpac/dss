@@ -13,8 +13,8 @@ type _Port struct {
 }
 
 // Get
-// @Summary Get Port Scan Result
-// @Tags PortScan
+// @Summary Get Scan Result
+// @Tags Scan
 // @Accept  json
 // @Produce  json
 // @Param search query string false "Fuzzy Query"
@@ -44,7 +44,7 @@ func (*_Port) Get(ctx *gin.Context) {
 
 // Remind
 // @Summary Compare yesterday with today,if new port open in today will notify by workChat
-// @Tags PortScan
+// @Tags Scan
 // @Accept  json
 // @Produce  json
 // @Success 200 {object} models.Response
@@ -60,7 +60,7 @@ func (*_Port) Remind(ctx *gin.Context) {
 
 // Clear
 // @Summary Clear data more than 7 days
-// @Tags PortScan
+// @Tags Scan
 // @Accept  json
 // @Produce  json
 // @Success 200 {object} models.Response
@@ -76,7 +76,7 @@ func (*_Port) Clear(ctx *gin.Context) {
 
 // Trend
 // @Summary last 7 days scan trend
-// @Tags PortScan
+// @Tags Scan
 // @Accept  json
 // @Produce  json
 // @Success 200 {object} models.Response
@@ -96,7 +96,7 @@ func (*_Port) Trend(ctx *gin.Context) {
 
 // Location
 // @Summary GroupBy Location
-// @Tags PortScan
+// @Tags Scan
 // @Accept  json
 // @Produce  json
 // @Success 200 {object} models.Response

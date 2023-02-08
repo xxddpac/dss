@@ -34,9 +34,9 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "PortScan"
+                    "Scan"
                 ],
-                "summary": "Get Port Scan Result",
+                "summary": "Get Scan Result",
                 "parameters": [
                     {
                         "type": "string",
@@ -94,7 +94,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "PortScan"
+                    "Scan"
                 ],
                 "summary": "Clear data more than 7 days",
                 "responses": {
@@ -122,7 +122,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "PortScan"
+                    "Scan"
                 ],
                 "summary": "GroupBy Location",
                 "responses": {
@@ -150,7 +150,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "PortScan"
+                    "Scan"
                 ],
                 "summary": "Compare yesterday with today,if new port open in today will notify by workChat",
                 "responses": {
@@ -178,7 +178,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "PortScan"
+                    "Scan"
                 ],
                 "summary": "last 7 days scan trend",
                 "responses": {

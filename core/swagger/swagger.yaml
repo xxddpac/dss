@@ -72,9 +72,9 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/models.Response'
-      summary: Get Port Scan Result
+      summary: Get Scan Result
       tags:
-      - PortScan
+      - Scan
   /api/v1/port/clear:
     delete:
       consumes:
@@ -92,7 +92,7 @@ paths:
             $ref: '#/definitions/models.Response'
       summary: Clear data more than 7 days
       tags:
-      - PortScan
+      - Scan
   /api/v1/port/location:
     get:
       consumes:
@@ -110,7 +110,7 @@ paths:
             $ref: '#/definitions/models.Response'
       summary: GroupBy Location
       tags:
-      - PortScan
+      - Scan
   /api/v1/port/remind:
     get:
       consumes:
@@ -129,7 +129,7 @@ paths:
       summary: Compare yesterday with today,if new port open in today will notify
         by workChat
       tags:
-      - PortScan
+      - Scan
   /api/v1/port/trend:
     get:
       consumes:
@@ -147,7 +147,7 @@ paths:
             $ref: '#/definitions/models.Response'
       summary: last 7 days scan trend
       tags:
-      - PortScan
+      - Scan
   /api/v1/rule:
     delete:
       consumes:
