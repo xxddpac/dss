@@ -24,7 +24,7 @@ type _Scan struct {
 // @Param size query string false "Current Size Default:10"
 // @Success 200 {object} models.Response
 // @Failure 400 {object} models.Response
-// @Router /api/v1/port [get]
+// @Router /api/v1/scan [get]
 func (*_Scan) Get(ctx *gin.Context) {
 	var (
 		g     = models.Gin{Ctx: ctx}
@@ -49,7 +49,7 @@ func (*_Scan) Get(ctx *gin.Context) {
 // @Produce  json
 // @Success 200 {object} models.Response
 // @Failure 400 {object} models.Response
-// @Router /api/v1/port/remind [get]
+// @Router /api/v1/scan/remind [get]
 func (*_Scan) Remind(ctx *gin.Context) {
 	var (
 		g = models.Gin{Ctx: ctx}
@@ -65,7 +65,7 @@ func (*_Scan) Remind(ctx *gin.Context) {
 // @Produce  json
 // @Success 200 {object} models.Response
 // @Failure 400 {object} models.Response
-// @Router /api/v1/port/clear [delete]
+// @Router /api/v1/scan/clear [delete]
 func (*_Scan) Clear(ctx *gin.Context) {
 	var (
 		g = models.Gin{Ctx: ctx}
@@ -81,7 +81,7 @@ func (*_Scan) Clear(ctx *gin.Context) {
 // @Produce  json
 // @Success 200 {object} models.Response
 // @Failure 400 {object} models.Response
-// @Router /api/v1/port/trend [get]
+// @Router /api/v1/scan/trend [get]
 func (*_Scan) Trend(ctx *gin.Context) {
 	var (
 		g = models.Gin{Ctx: ctx}
@@ -101,7 +101,7 @@ func (*_Scan) Trend(ctx *gin.Context) {
 // @Produce  json
 // @Success 200 {object} models.Response
 // @Failure 400 {object} models.Response
-// @Router /api/v1/port/location [get]
+// @Router /api/v1/scan/location [get]
 func (*_Scan) Location(ctx *gin.Context) {
 	var (
 		g = models.Gin{Ctx: ctx}

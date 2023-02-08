@@ -36,118 +36,6 @@ info:
   title: Distributed Scan Services
   version: "1.0"
 paths:
-  /api/v1/port:
-    get:
-      consumes:
-      - application/json
-      parameters:
-      - description: Fuzzy Query
-        in: query
-        name: search
-        type: string
-      - description: Location Select
-        in: query
-        name: location
-        type: string
-      - description: Date Select
-        in: query
-        name: date
-        type: string
-      - description: Current Page Default:1
-        in: query
-        name: page
-        type: string
-      - description: Current Size Default:10
-        in: query
-        name: size
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.Response'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/models.Response'
-      summary: Get Scan Result
-      tags:
-      - Scan
-  /api/v1/port/clear:
-    delete:
-      consumes:
-      - application/json
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.Response'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/models.Response'
-      summary: Clear data more than 7 days
-      tags:
-      - Scan
-  /api/v1/port/location:
-    get:
-      consumes:
-      - application/json
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.Response'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/models.Response'
-      summary: GroupBy Location
-      tags:
-      - Scan
-  /api/v1/port/remind:
-    get:
-      consumes:
-      - application/json
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.Response'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/models.Response'
-      summary: Compare yesterday with today,if new port open in today will notify
-        by workChat
-      tags:
-      - Scan
-  /api/v1/port/trend:
-    get:
-      consumes:
-      - application/json
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/models.Response'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/models.Response'
-      summary: last 7 days scan trend
-      tags:
-      - Scan
   /api/v1/rule:
     delete:
       consumes:
@@ -281,6 +169,118 @@ paths:
       summary: Display rule type enum
       tags:
       - Rule
+  /api/v1/scan:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Fuzzy Query
+        in: query
+        name: search
+        type: string
+      - description: Location Select
+        in: query
+        name: location
+        type: string
+      - description: Date Select
+        in: query
+        name: date
+        type: string
+      - description: Current Page Default:1
+        in: query
+        name: page
+        type: string
+      - description: Current Size Default:10
+        in: query
+        name: size
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Get Scan Result
+      tags:
+      - Scan
+  /api/v1/scan/clear:
+    delete:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Clear data more than 7 days
+      tags:
+      - Scan
+  /api/v1/scan/location:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: GroupBy Location
+      tags:
+      - Scan
+  /api/v1/scan/remind:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Compare yesterday with today,if new port open in today will notify
+        by workChat
+      tags:
+      - Scan
+  /api/v1/scan/trend:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: last 7 days scan trend
+      tags:
+      - Scan
   /api/v1/task:
     post:
       consumes:
