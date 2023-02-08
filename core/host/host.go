@@ -1,6 +1,7 @@
 package host
 
 import (
+	"github.com/shirou/gopsutil/v3/host"
 	"net"
 	"os"
 	"strings"
@@ -8,15 +9,18 @@ import (
 )
 
 var (
-	Name        atomic.Value
-	PrivateIPv4 atomic.Value
+	Name            atomic.Value
+	PrivateIPv4     atomic.Value
+	Platform        atomic.Value
+	PlatformVersion atomic.Value
 )
 
 func RefreshHost() {
 	var (
-		privateIPv4 []string
-		address     []net.Addr
-		ip          net.IP
+		privateIPv4               []string
+		platform, platformVersion string
+		address                   []net.Addr
+		ip                        net.IP
 	)
 	hostname, _ := os.Hostname()
 	Name.Store(hostname)
@@ -48,4 +52,7 @@ func RefreshHost() {
 		privateIPv4 = privateIPv4[:5]
 	}
 	PrivateIPv4.Store(privateIPv4)
+	platform, _, platformVersion, _ = host.PlatformInformation()
+	Platform.Store(platform)
+	PlatformVersion.Store(platformVersion)
 }

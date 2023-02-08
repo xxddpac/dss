@@ -9,4 +9,6 @@ func TestRefreshHost(t *testing.T) {
 	RefreshHost()
 	assert.NotEqual(t, 0, len(PrivateIPv4.Load().([]string)))
 	assert.NotEqual(t, 0, len(Name.Load().(string)))
+	assert.NotEqual(t, 0, len(PlatformVersion.Load().(string)))
+	assert.NotEqual(t, 0, len(Platform.Load().(string)))
 }
