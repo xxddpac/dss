@@ -7,9 +7,9 @@ import (
 	"net/http"
 )
 
-var Port *_Port
+var Scan *_Scan
 
-type _Port struct {
+type _Scan struct {
 }
 
 // Get
@@ -25,7 +25,7 @@ type _Port struct {
 // @Success 200 {object} models.Response
 // @Failure 400 {object} models.Response
 // @Router /api/v1/port [get]
-func (*_Port) Get(ctx *gin.Context) {
+func (*_Scan) Get(ctx *gin.Context) {
 	var (
 		g     = models.Gin{Ctx: ctx}
 		param = models.ScanQueryFunc()
@@ -34,7 +34,7 @@ func (*_Port) Get(ctx *gin.Context) {
 		g.Fail(http.StatusBadRequest, err)
 		return
 	}
-	resp, err := management.PortManager.Get(*param)
+	resp, err := management.ScanManager.Get(*param)
 	if err != nil {
 		g.Fail(http.StatusBadRequest, err)
 		return
@@ -50,11 +50,11 @@ func (*_Port) Get(ctx *gin.Context) {
 // @Success 200 {object} models.Response
 // @Failure 400 {object} models.Response
 // @Router /api/v1/port/remind [get]
-func (*_Port) Remind(ctx *gin.Context) {
+func (*_Scan) Remind(ctx *gin.Context) {
 	var (
 		g = models.Gin{Ctx: ctx}
 	)
-	go management.PortManager.Remind()
+	go management.ScanManager.Remind()
 	g.Success(nil)
 }
 
@@ -66,11 +66,11 @@ func (*_Port) Remind(ctx *gin.Context) {
 // @Success 200 {object} models.Response
 // @Failure 400 {object} models.Response
 // @Router /api/v1/port/clear [delete]
-func (*_Port) Clear(ctx *gin.Context) {
+func (*_Scan) Clear(ctx *gin.Context) {
 	var (
 		g = models.Gin{Ctx: ctx}
 	)
-	go management.PortManager.Clear()
+	go management.ScanManager.Clear()
 	g.Success(nil)
 }
 
@@ -82,11 +82,11 @@ func (*_Port) Clear(ctx *gin.Context) {
 // @Success 200 {object} models.Response
 // @Failure 400 {object} models.Response
 // @Router /api/v1/port/trend [get]
-func (*_Port) Trend(ctx *gin.Context) {
+func (*_Scan) Trend(ctx *gin.Context) {
 	var (
 		g = models.Gin{Ctx: ctx}
 	)
-	resp, err := management.PortManager.Trend()
+	resp, err := management.ScanManager.Trend()
 	if err != nil {
 		g.Fail(http.StatusBadRequest, err)
 		return
@@ -102,11 +102,11 @@ func (*_Port) Trend(ctx *gin.Context) {
 // @Success 200 {object} models.Response
 // @Failure 400 {object} models.Response
 // @Router /api/v1/port/location [get]
-func (*_Port) Location(ctx *gin.Context) {
+func (*_Scan) Location(ctx *gin.Context) {
 	var (
 		g = models.Gin{Ctx: ctx}
 	)
-	resp, err := management.PortManager.Location()
+	resp, err := management.ScanManager.Location()
 	if err != nil {
 		g.Fail(http.StatusBadRequest, err)
 		return

@@ -23,12 +23,12 @@ import (
 )
 
 var (
-	PortManager *_PortManager
+	ScanManager *_ScanManager
 	location    = "location"
 	doneTime    = "done_time"
 )
 
-type _PortManager struct {
+type _ScanManager struct {
 }
 
 type ErrInfo struct {
@@ -38,7 +38,7 @@ type ErrInfo struct {
 	ErrMsg  string `json:"errmsg"`
 }
 
-func (*_PortManager) Get(param models.ScanQuery) (interface{}, error) {
+func (*_ScanManager) Get(param models.ScanQuery) (interface{}, error) {
 	var (
 		result models.ScanQueryResult
 		resp   []*models.ScanInsert
@@ -77,14 +77,14 @@ func (*_PortManager) Get(param models.ScanQuery) (interface{}, error) {
 	return result, nil
 }
 
-func (*_PortManager) FieldGroupBy(field string) (pipeline []bson.M) {
+func (*_ScanManager) FieldGroupBy(field string) (pipeline []bson.M) {
 	group := bson.M{"$group": bson.M{"_id": fmt.Sprintf("$%s", field), "count": bson.M{"$sum": 1}}}
 	orderBy := bson.M{"$sort": bson.M{"_id": 1}}
 	pipeline = []bson.M{group, orderBy}
 	return
 }
 
-func (*_PortManager) Parse(resp []bson.M) (result []string) {
+func (*_ScanManager) Parse(resp []bson.M) (result []string) {
 	for _, item := range resp {
 		if _, ok := item["_id"].(string); !ok {
 			continue
@@ -94,29 +94,29 @@ func (*_PortManager) Parse(resp []bson.M) (result []string) {
 	return
 }
 
-func (*_PortManager) Location() (interface{}, error) {
+func (*_ScanManager) Location() (interface{}, error) {
 	var (
 		err            error
 		resp, pipeline []bson.M
 	)
-	pipeline = PortManager.FieldGroupBy(location)
+	pipeline = ScanManager.FieldGroupBy(location)
 	if err = dao.Repo(global.Scan).Aggregate(pipeline, &resp); err != nil {
 		return nil, err
 	}
-	return PortManager.Parse(resp), nil
+	return ScanManager.Parse(resp), nil
 }
 
-func (*_PortManager) Clear() {
+func (*_ScanManager) Clear() {
 	var (
 		err            error
 		resp, pipeline []bson.M
 	)
-	pipeline = PortManager.FieldGroupBy(doneTime)
+	pipeline = ScanManager.FieldGroupBy(doneTime)
 	if err = dao.Repo(global.Scan).Aggregate(pipeline, &resp); err != nil {
 		log.Errorf("group by field err:%v", err)
 		return
 	}
-	result := PortManager.Parse(resp)
+	result := ScanManager.Parse(resp)
 	if len(result) <= 7 {
 		return
 	}
@@ -128,17 +128,17 @@ func (*_PortManager) Clear() {
 	}
 }
 
-func (*_PortManager) Trend() (interface{}, error) {
+func (*_ScanManager) Trend() (interface{}, error) {
 	var (
 		err            error
 		resp, pipeline []bson.M
 		result         []map[string]interface{}
 	)
-	pipeline = PortManager.FieldGroupBy(doneTime)
+	pipeline = ScanManager.FieldGroupBy(doneTime)
 	if err = dao.Repo(global.Scan).Aggregate(pipeline, &resp); err != nil {
 		return nil, err
 	}
-	res := PortManager.Parse(resp)
+	res := ScanManager.Parse(resp)
 	if len(res) > 7 {
 		res = res[len(res)-7:]
 	}
@@ -151,7 +151,7 @@ func (*_PortManager) Trend() (interface{}, error) {
 	return result, nil
 }
 
-func (*_PortManager) Remind() {
+func (*_ScanManager) Remind() {
 	var (
 		s                                    []models.Scan
 		err                                  error
@@ -218,23 +218,23 @@ func (*_PortManager) Remind() {
 				log.Errorf("remove tmp file %v err:%v", filePath, err)
 			}
 		}()
-		headers, body, err = PortManager.buildMultipartFormData(filePath)
+		headers, body, err = ScanManager.buildMultipartFormData(filePath)
 		if err != nil {
 			log.Errorf("build multipart form_data err:%v", err)
 			return
 		}
-		key, err = PortManager.uploadFileToWorkChat(headers, body)
+		key, err = ScanManager.uploadFileToWorkChat(headers, body)
 		if err != nil {
 			log.Errorf("uploadFileToWorkChat err:%v", err)
 			return
 		}
-		if err = PortManager.notify(key); err != nil {
+		if err = ScanManager.notify(key); err != nil {
 			log.Errorf("notify err:%v", err)
 		}
 	}
 }
 
-func (*_PortManager) notify(key string) error {
+func (*_ScanManager) notify(key string) error {
 	var (
 		e              ErrInfo
 		byteStr        []byte
@@ -256,7 +256,7 @@ func (*_PortManager) notify(key string) error {
 	return nil
 }
 
-func (*_PortManager) uploadFileToWorkChat(headers map[string]string, body io.Reader) (string, error) {
+func (*_ScanManager) uploadFileToWorkChat(headers map[string]string, body io.Reader) (string, error) {
 	type uploadFile struct {
 		MediaId string `json:"media_id"`
 		ErrInfo
@@ -279,7 +279,7 @@ func (*_PortManager) uploadFileToWorkChat(headers map[string]string, body io.Rea
 	return u.MediaId, nil
 }
 
-func (*_PortManager) buildMultipartFormData(path string) (map[string]string, io.Reader, error) {
+func (*_ScanManager) buildMultipartFormData(path string) (map[string]string, io.Reader, error) {
 	var (
 		err       error
 		file      *os.File

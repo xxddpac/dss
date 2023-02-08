@@ -17,13 +17,13 @@ func Register(v1 *gin.RouterGroup) {
 	{
 		task.POST("", Task.Post) // push task to redis
 	}
-	//port scan result
-	port := v1.Group("/port")
+	//scan result
+	scan := v1.Group("/scan")
 	{
-		port.GET("", Port.Get)              // list port scan result
-		port.GET("trend", Port.Trend)       // last 7 days scan result trend
-		port.GET("remind", Port.Remind)     // send notification if new port open  (schedule)
-		port.GET("location", Port.Location) // location select from web front
-		port.DELETE("clear", Port.Clear)    // save last 7 days result (schedule)
+		scan.GET("", Scan.Get)              // list scan result
+		scan.GET("trend", Scan.Trend)       // last 7 days scan result trend
+		scan.GET("remind", Scan.Remind)     // send notification if new port open  (schedule)
+		scan.GET("location", Scan.Location) // location select from web front
+		scan.DELETE("clear", Scan.Clear)    // save last 7 days result (schedule)
 	}
 }
