@@ -57,7 +57,7 @@ func run() {
 }
 
 func (s *scanInfo) Do() {
-	client, err := net.DialTimeout("tcp", fmt.Sprintf("%v:%v", s.Host, s.Port), timeout*time.Second)
+	client, err := net.DialTimeout(global.TCP, fmt.Sprintf("%v:%v", s.Host, s.Port), timeout*time.Second)
 	if err == nil {
 		_ = client.Close()
 		go dispatch(*s)
@@ -67,8 +67,8 @@ func (s *scanInfo) Do() {
 }
 
 func store() {
-	//every 10 Second collecting data insert into mongo
-	ticker := time.NewTicker(time.Second * 10)
+	//every 5 seconds collecting data insert into mongo
+	ticker := time.NewTicker(time.Second * 5)
 	defer ticker.Stop()
 	for {
 		select {
