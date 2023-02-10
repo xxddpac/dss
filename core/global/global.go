@@ -6,6 +6,7 @@ const (
 	PortScanQueue = "port_scan"
 	Scan          = "scan"
 	ScanRule      = "scan_rule"
+	GrpcClient    = "grpc_client"
 	SSH           = "22"
 	REDIS         = "6379"
 	MYSQL         = "3306"

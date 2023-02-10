@@ -41,9 +41,11 @@ Mode = "release"
 MaxWorkers = 10
 MaxQueue = 10
 TimeOut = 3
+GrpcPort = 9092
 
 [producer]
 Port = 9091
 Mode = "release"
 WorkChatUploadUrl = "https://qyapi.weixin.qq.com/cgi-bin/webhook/upload_media?key=Your-Key&type=file"
 WorkChatBotUrl = "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=Your-Key"
+GrpcPort = 9092

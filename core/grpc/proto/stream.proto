@@ -1,0 +1,22 @@
+syntax = "proto3";
+option go_package = ".;proto";
+package proto;
+
+service StreamService {
+    rpc Record(stream StreamRequest) returns (StreamResponse) {};
+}
+
+message StreamPoint {
+  string name = 1;
+  string host = 2;
+  string platform = 3;
+  string platform_version = 4;
+}
+
+message StreamRequest {
+  StreamPoint pt = 1;
+}
+
+message StreamResponse {
+  StreamPoint pt = 1;
+}

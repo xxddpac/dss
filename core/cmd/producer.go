@@ -6,6 +6,7 @@ import (
 	"dss/common/redis"
 	"dss/core/config"
 	"dss/core/global"
+	"dss/core/grpc/producer"
 	"dss/core/router"
 	"dss/core/server"
 	"github.com/gin-gonic/gin"
@@ -29,6 +30,7 @@ func Producer() *cobra.Command {
 			config.Init(cfg)
 			conf := config.CoreConf
 			log.Init(&conf.Log)
+			producer.Grpc()
 			if err := redis.Init(&conf.Redis); err != nil {
 				log.Fatal("Init redis failed", zap.Error(err))
 			}

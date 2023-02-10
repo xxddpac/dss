@@ -5,6 +5,7 @@ import (
 	"dss/common/log"
 	"dss/core/config"
 	"dss/core/global"
+	"dss/core/grpc/producer"
 	"dss/core/scan"
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -64,6 +65,7 @@ func tryDisConn(srv *http.Server, mode global.RunMode) {
 		if mode == global.Consumer {
 			scan.Close()
 		}
+		producer.CloseGrpc()
 		global.Cancel()
 		os.Exit(0)
 	}

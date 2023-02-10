@@ -36,6 +36,7 @@ type Consumer struct {
 	MaxWorkers int
 	MaxQueue   int
 	TimeOut    time.Duration
+	GrpcPort   int
 }
 
 type Producer struct {
@@ -43,4 +44,5 @@ type Producer struct {
 	Mode              string
 	WorkChatUploadUrl string
 	WorkChatBotUrl    string
+	GrpcPort          int
 }
