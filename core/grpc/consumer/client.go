@@ -4,7 +4,6 @@ import (
 	"context"
 	"dss/common/log"
 	"dss/core/config"
-	"dss/core/global"
 	pb "dss/core/grpc/proto"
 	"dss/core/host"
 	"fmt"
@@ -15,7 +14,7 @@ import (
 	"time"
 )
 
-func Startup() {
+func Startup(ctx context.Context) {
 	var (
 		err    error
 		conn   *grpc.ClientConn
@@ -25,14 +24,21 @@ func Startup() {
 	if err != nil {
 		log.Fatal(err.Error())
 	}
+	defer func(conn *grpc.ClientConn) {
+		err = conn.Close()
+		if err != nil {
+			log.Errorf(err.Error())
+		}
+	}(conn)
+	// every 1 minute refresh gRPC client heartbeat
 	ticker := time.NewTicker(1 * time.Minute)
 	defer ticker.Stop()
 	for {
 		select {
 		case <-ticker.C:
-			client, err = pb.NewStreamServiceClient(conn).Record(context.Background())
+			client, err = pb.NewStreamServiceClient(conn).Record(ctx)
 			if err != nil {
-				log.Errorf(err.Error())
+				log.Fatal(err.Error())
 			}
 			req := pb.StreamRequest{Pt: &pb.StreamPoint{
 				Host:            strings.Join(host.PrivateIPv4.Load().([]string), ","),
@@ -43,10 +49,7 @@ func Startup() {
 			if err = client.Send(&req); err != nil {
 				log.Errorf(err.Error())
 			}
-		case <-global.Ctx.Done():
-			if _, err = client.CloseAndRecv(); err != nil {
-				log.Errorf(err.Error())
-			}
+		case <-ctx.Done():
 			return
 		}
 	}
@@ -65,6 +68,9 @@ func getClientConn() (*grpc.ClientConn, error) {
 		grpc.WithDefaultCallOptions(grpc.MaxCallSendMsgSize(16 * 1024 * 1024)),
 		grpc.WithConnectParams(grpc.ConnectParams{Backoff: backoff.Config{MaxDelay: time.Second * 2}, MinConnectTimeout: time.Second * 2}),
 	}
+	/*
+		TODO: Get gRPC Server address from consul
+	*/
 	conn, err = grpc.DialContext(context.Background(), fmt.Sprintf(":%d", config.CoreConf.Consumer.GrpcPort), options...)
 	if err != nil {
 		return nil, fmt.Errorf("grpc.dial err: %s", err.Error())

@@ -65,7 +65,9 @@ func tryDisConn(srv *http.Server, mode global.RunMode) {
 		if mode == global.Consumer {
 			scan.Close()
 		}
-		producer.CloseGrpc()
+		if mode == global.Producer {
+			producer.CloseGrpc()
+		}
 		global.Cancel()
 		os.Exit(0)
 	}

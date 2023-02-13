@@ -50,7 +50,6 @@ func NewGrpcServer() {
 		MinTime:             defaultMinPingTime,
 		PermitWithoutStream: true,
 	}
-
 	sp := keepalive.ServerParameters{
 		MaxConnectionIdle: defaultMaxConnIdle,
 		Time:              defaultPingTime,
@@ -69,27 +68,25 @@ func NewGrpcServer() {
 }
 
 func (s *StreamService) Record(stream pb.StreamService_RecordServer) error {
-	for {
-		response, err := stream.Recv()
-		if err != nil {
-			log.Errorf(err.Error())
-			continue
-		}
-		if err = dao.Repo(global.GrpcClient).RemoveAll(bson.M{"host": response.Pt.Host}); err != nil {
-			log.Errorf("remove gRPC client %v record err:%v", response.Pt.Host, err)
-			continue
-		}
-		if err = dao.Repo(global.GrpcClient).Insert(
-			models.ClientInsertFunc(
-				models.Client{
-					Host:            response.Pt.Host,
-					Name:            response.Pt.Name,
-					Platform:        response.Pt.Platform,
-					PlatformVersion: response.Pt.PlatformVersion,
-				})); err != nil {
-			log.Errorf("insert gRPC client %v record err:", response.Pt.Host, err)
-		}
+	response, err := stream.Recv()
+	if err != nil {
+		return err
 	}
+	if err = dao.Repo(global.GrpcClient).RemoveAll(bson.M{"host": response.Pt.Host}); err != nil {
+		log.Errorf("remove gRPC client %v record err:%v", response.Pt.Host, err)
+		return err
+	}
+	if err = dao.Repo(global.GrpcClient).Insert(
+		models.ClientInsertFunc(
+			models.Client{
+				Host:            response.Pt.Host,
+				Name:            response.Pt.Name,
+				Platform:        response.Pt.Platform,
+				PlatformVersion: response.Pt.PlatformVersion,
+			})); err != nil {
+		log.Errorf("insert gRPC client %v record err:", response.Pt.Host, err)
+	}
+	return nil
 }
 
 func CloseGrpc() {
