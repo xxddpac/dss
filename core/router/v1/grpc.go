@@ -12,6 +12,17 @@ var Grpc *_Grpc
 type _Grpc struct {
 }
 
+// Get
+// @Summary Get Grpc Client
+// @Tags Grpc
+// @Accept  json
+// @Produce  json
+// @Param search query string false "Fuzzy Query"
+// @Param page query string false "Current Page Default:1"
+// @Param size query string false "Current Size Default:10"
+// @Success 200 {object} models.Response
+// @Failure 400 {object} models.Response
+// @Router /api/v1/grpc/client [get]
 func (*_Grpc) Get(ctx *gin.Context) {
 	var (
 		g     = models.Gin{Ctx: ctx}
