@@ -1,11 +1,13 @@
 package host
 
 import (
+	"context"
 	"github.com/shirou/gopsutil/v3/host"
 	"net"
 	"os"
 	"strings"
 	"sync/atomic"
+	"time"
 )
 
 var (
@@ -14,6 +16,19 @@ var (
 	Platform        atomic.Value
 	PlatformVersion atomic.Value
 )
+
+func InitRefreshHost(ctx context.Context) {
+	ticker := time.NewTicker(20 * time.Second)
+	defer ticker.Stop()
+	for {
+		select {
+		case <-ticker.C:
+			RefreshHost()
+		case <-ctx.Done():
+			return
+		}
+	}
+}
 
 func RefreshHost() {
 	var (

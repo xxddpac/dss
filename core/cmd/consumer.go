@@ -38,8 +38,8 @@ func Consumer() *cobra.Command {
 			if err := mongo.Init(&conf.Mongo); err != nil {
 				log.Fatal("Init mongo failed", zap.Error(err))
 			}
-			host.RefreshHost()
 			go consumer.Startup(global.Ctx)
+			go host.InitRefreshHost(global.Ctx)
 			scan.Init(conf.Consumer.MaxWorkers, conf.Consumer.MaxQueue, log.Logger())
 			gin.SetMode(conf.Consumer.Mode)
 		},
