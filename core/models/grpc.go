@@ -1,6 +1,7 @@
 package models
 
 import (
+	"dss/core/global"
 	"github.com/globalsign/mgo/bson"
 	"time"
 )
@@ -62,6 +63,7 @@ func ClientQueryResultFunc(c []*ClientInsert) []ClientQueryResultDto {
 	for _, item := range c {
 		resp.ClientQueryDto = *item.ToDto()
 		resp.Client = item.Client
+		resp.IsOnline = item.CreatedTime+global.TimeUnix > time.Now().Unix()
 		result = append(result, resp)
 	}
 	return result

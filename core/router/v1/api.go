@@ -26,4 +26,8 @@ func Register(v1 *gin.RouterGroup) {
 		scan.GET("location", Scan.Location) // location select from web front
 		scan.DELETE("clear", Scan.Clear)    // save last 7 days result (schedule)
 	}
+	grpc := v1.Group("/grpc")
+	{
+		grpc.GET("client", Grpc.Get) // get all gRPC client info
+	}
 }
