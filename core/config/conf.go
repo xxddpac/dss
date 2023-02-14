@@ -1,6 +1,7 @@
 package config
 
 import (
+	"dss/common/consul"
 	"dss/common/log"
 	"dss/common/mongo"
 	"dss/common/redis"
@@ -23,26 +24,26 @@ func Init(conf string) {
 }
 
 type config struct {
-	Log      log.Config
-	Redis    redis.Config
-	Mongo    mongo.Config
-	Consumer Consumer
-	Producer Producer
+	Log         log.Config
+	Redis       redis.Config
+	Mongo       mongo.Config
+	Consumer    Consumer
+	Producer    Producer
+	Consul      consul.Config
+	Mode        string
+	ServiceName string
+	MaxWorkers  int
+	MaxQueue    int
+	GrpcPort    int
 }
 
 type Consumer struct {
-	Port       int
-	Mode       string
-	MaxWorkers int
-	MaxQueue   int
-	TimeOut    time.Duration
-	GrpcPort   int
+	Port    int
+	TimeOut time.Duration
 }
 
 type Producer struct {
 	Port              int
-	Mode              string
 	WorkChatUploadUrl string
 	WorkChatBotUrl    string
-	GrpcPort          int
 }

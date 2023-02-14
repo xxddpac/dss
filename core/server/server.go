@@ -2,10 +2,12 @@ package server
 
 import (
 	"context"
+	"dss/common/consul"
 	"dss/common/log"
 	"dss/core/config"
 	"dss/core/global"
 	"dss/core/grpc/producer"
+	"dss/core/host"
 	"dss/core/scan"
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -67,6 +69,8 @@ func tryDisConn(srv *http.Server, mode global.RunMode) {
 		}
 		if mode == global.Producer {
 			producer.CloseGrpc()
+			_ = consul.Deregister(fmt.Sprintf("%s-%s", config.CoreConf.ServiceName, host.LocalIP()))
+			consul.Close()
 		}
 		global.Cancel()
 		os.Exit(0)

@@ -32,7 +32,7 @@ type StreamService struct{}
 
 func Grpc() {
 	NewGrpcServer()
-	addr := fmt.Sprintf(":%d", config.CoreConf.Producer.GrpcPort)
+	addr := fmt.Sprintf(":%d", config.CoreConf.GrpcPort)
 	lis, err := net.Listen(global.TCP, addr)
 	if err != nil {
 		log.Fatal(err.Error())

@@ -1,12 +1,14 @@
 package cmd
 
 import (
+	"dss/common/consul"
 	"dss/common/log"
 	"dss/common/mongo"
 	"dss/common/redis"
 	"dss/core/config"
 	"dss/core/global"
 	"dss/core/grpc/producer"
+	"dss/core/host"
 	"dss/core/router"
 	"dss/core/server"
 	"github.com/gin-gonic/gin"
@@ -19,7 +21,7 @@ func Producer() *cobra.Command {
 	var (
 		cfg string
 	)
-	cmdConsumer := &cobra.Command{
+	cmdProducer := &cobra.Command{
 		Use:   "producer",
 		Short: "Start Run Security Scan Producer",
 		Run: func(cmd *cobra.Command, args []string) {
@@ -29,7 +31,10 @@ func Producer() *cobra.Command {
 			}
 			config.Init(cfg)
 			conf := config.CoreConf
+			consul.ServiceName = conf.ServiceName
+			consul.Port = conf.Producer.Port
 			log.Init(&conf.Log)
+			host.RefreshHost()
 			producer.Grpc()
 			if err := redis.Init(&conf.Redis); err != nil {
 				log.Fatal("Init redis failed", zap.Error(err))
@@ -37,7 +42,11 @@ func Producer() *cobra.Command {
 			if err := mongo.Init(&conf.Mongo); err != nil {
 				log.Fatal("Init mongo failed", zap.Error(err))
 			}
-			gin.SetMode(conf.Consumer.Mode)
+			if err := consul.Init(&conf.Consul); err != nil {
+				log.Fatal("Init consul failed", zap.Error(err))
+			}
+			consul.Register()
+			gin.SetMode(conf.Mode)
 		},
 		PostRun: func(cmd *cobra.Command, args []string) {
 			if err := server.Run(router.NewHttpRouter(), global.Producer); nil != err {
@@ -45,6 +54,6 @@ func Producer() *cobra.Command {
 			}
 		},
 	}
-	cmdConsumer.Flags().StringVarP(&cfg, "conf", "c", "", "server config [toml]")
-	return cmdConsumer
+	cmdProducer.Flags().StringVarP(&cfg, "conf", "c", "", "server config [toml]")
+	return cmdProducer
 }

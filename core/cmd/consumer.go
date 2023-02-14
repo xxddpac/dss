@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"dss/common/consul"
 	"dss/common/log"
 	"dss/common/mongo"
 	"dss/common/redis"
@@ -38,10 +39,13 @@ func Consumer() *cobra.Command {
 			if err := mongo.Init(&conf.Mongo); err != nil {
 				log.Fatal("Init mongo failed", zap.Error(err))
 			}
-			go consumer.Startup(global.Ctx)
+			if err := consul.Init(&conf.Consul); err != nil {
+				log.Fatal("Init consul failed", zap.Error(err))
+			}
+			consumer.Startup(global.Ctx)
 			go host.InitRefreshHost(global.Ctx)
-			scan.Init(conf.Consumer.MaxWorkers, conf.Consumer.MaxQueue, log.Logger())
-			gin.SetMode(conf.Consumer.Mode)
+			scan.Init(conf.MaxWorkers, conf.MaxQueue, log.Logger())
+			gin.SetMode(conf.Mode)
 		},
 		PostRun: func(cmd *cobra.Command, args []string) {
 			if err := server.Run(router.NewHttpRouter(), global.Consumer); nil != err {

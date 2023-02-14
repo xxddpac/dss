@@ -17,6 +17,18 @@ var (
 	PlatformVersion atomic.Value
 )
 
+func init() {
+	RefreshHost()
+}
+
+func LocalIP() string {
+	PrivateIPv4S := PrivateIPv4.Load().([]string)
+	if len(PrivateIPv4S) != 0 {
+		return PrivateIPv4S[0]
+	}
+	return ""
+}
+
 func InitRefreshHost(ctx context.Context) {
 	ticker := time.NewTicker(20 * time.Second)
 	defer ticker.Stop()

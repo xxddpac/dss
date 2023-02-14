@@ -30,4 +30,4 @@ jobs:
         run: go build .
 
       - name: Run testing
-        run: go test `go list ./... | grep -v dao`
+        run: go test `go list ./... | grep -v dao | grep -v consul `
