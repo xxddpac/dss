@@ -1,7 +1,7 @@
 Mode = "debug"
 GrpcPort = 9092
-MaxWorkers = 10
-MaxQueue = 10
+MaxWorkers = 10 # goroutine worker number
+MaxQueue = 10 # task queue number
 ServiceName = "dss"
 
 [log]
