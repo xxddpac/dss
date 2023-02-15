@@ -84,3 +84,8 @@ func Exists(path string) bool {
 	}
 	return true
 }
+
+func WorkingDirectory() string {
+	workingDirectory, _ := os.Getwd()
+	return workingDirectory
+}

@@ -2,7 +2,10 @@ package consumer
 
 import (
 	"context"
+	"crypto/tls"
+	"crypto/x509"
 	"dss/common/log"
+	"dss/common/utils"
 	"dss/core/config"
 	"dss/core/discover"
 	pb "dss/core/grpc/proto"
@@ -10,8 +13,10 @@ import (
 	"fmt"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/backoff"
-	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/credentials"
 	"net"
+	"os"
+	"path/filepath"
 	"time"
 )
 
@@ -72,10 +77,15 @@ func getClientConn(srv string) (*grpc.ClientConn, error) {
 	var (
 		err  error
 		conn *grpc.ClientConn
+		root = filepath.Join(utils.WorkingDirectory(), "common/cert")
 	)
+	cred, err := credential(filepath.Join(root, "client.pem"), filepath.Join(root, "client.key"), filepath.Join(root, "ca.pem"))
+	if err != nil {
+		return nil, fmt.Errorf("get credential error:%s", err.Error())
+	}
 	options := []grpc.DialOption{
+		grpc.WithTransportCredentials(cred),
 		grpc.WithBlock(),
-		grpc.WithTransportCredentials(insecure.NewCredentials()),
 		grpc.WithReturnConnectionError(),
 		grpc.FailOnNonTempDialError(true),
 		grpc.WithDefaultCallOptions(grpc.MaxCallSendMsgSize(16 * 1024 * 1024)),
@@ -87,4 +97,26 @@ func getClientConn(srv string) (*grpc.ClientConn, error) {
 		return nil, fmt.Errorf("grpc.dial err: %s", err.Error())
 	}
 	return conn, nil
+}
+
+func credential(crtFile, keyFile, caFile string) (credentials.TransportCredentials, error) {
+	cert, err := tls.LoadX509KeyPair(crtFile, keyFile)
+	if err != nil {
+		return nil, fmt.Errorf("load X509 error:%s", err.Error())
+	}
+	caBytes, err := os.ReadFile(caFile)
+	if err != nil {
+		return nil, fmt.Errorf("read ca file error:%s", err.Error())
+	}
+	certPool := x509.NewCertPool()
+	if ok := certPool.AppendCertsFromPEM(caBytes); !ok {
+		log.Errorf("append cert error")
+		return nil, fmt.Errorf("append cert error")
+	}
+	return credentials.NewTLS(&tls.Config{
+		Certificates: []tls.Certificate{cert},
+		ServerName:   config.CoreConf.ServiceName,
+		ClientAuth:   tls.RequireAndVerifyClientCert,
+		RootCAs:      certPool,
+	}), nil
 }
