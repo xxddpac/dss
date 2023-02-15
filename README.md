@@ -22,26 +22,43 @@ on producer node
 go run main.go producer -c conf.dev.toml
 ```
 
-open api docs
-
-```bash
-http://producer_ip:9091/swagger/index.html
-```
-
 on multiple consumer nodes
 
 ```bash
 go run main.go consumer -c conf.dev.toml
 ```
 
+open api docs
+
+```bash
+http://producer_ip:9091/swagger/index.html
+```
+
+init api docs
+
+```bash
+swag init -o core/swagger
+```
+
 ### Project structure
 
 ```bash
 ├── common
-│   ├── async
+│   ├── async # init goroutine pool
 │   │   ├── worker.go
 │   │   └── workerpool.go
-│   ├── consul
+│   ├── cert # gRPC certificate
+│   │   ├── ca.key
+│   │   ├── ca.pem
+│   │   ├── ca.srl
+│   │   ├── client.csr
+│   │   ├── client.key
+│   │   ├── client.pem
+│   │   ├── openssl.cnf
+│   │   ├── server.csr
+│   │   ├── server.key
+│   │   └── server.pem
+│   ├── consul # consul register service
 │   │   ├── consul.go
 │   │   └── consul_test.go
 │   ├── http
@@ -56,22 +73,22 @@ go run main.go consumer -c conf.dev.toml
 │   ├── redis
 │   │   ├── config.go
 │   │   └── redis.go
-│   ├── utils
+│   ├── utils # public tools
 │   │   ├── utils.go
 │   │   ├── utils_test.go
 │   │   ├── xlsx.go
 │   │   └── xlsx_test.go
-│   └── wp
+│   └── wp # weak password list
 │       ├── list
 │       ├── parser.go
 │       └── parser_test.go
-├── conf.dev.toml    
-├── conf.prod.toml  
+├── conf.dev.toml  # development configuration
+├── conf.prod.toml # production configuration
 ├── core
-│   ├── cmd
+│   ├── cmd # cli run 
 │   │   ├── consumer.go
 │   │   └── producer.go
-│   ├── config
+│   ├── config # init conf.*.toml
 │   │   └── conf.go
 │   ├── dao
 │   │   ├── mongo.go
@@ -79,7 +96,7 @@ go run main.go consumer -c conf.dev.toml
 │   │   ├── redis.go
 │   │   ├── redis_test.go
 │   │   └── repo.go
-│   ├── discover
+│   ├── discover # consul discover service
 │   │   └── discover.go
 │   ├── errors
 │   │   ├── business_error.go
@@ -87,7 +104,7 @@ go run main.go consumer -c conf.dev.toml
 │   ├── global
 │   │   ├── enum.go
 │   │   └── global.go
-│   ├── grpc
+│   ├── grpc # gRPC server and client
 │   │   ├── consumer
 │   │   │   └── client.go
 │   │   ├── producer
@@ -95,10 +112,10 @@ go run main.go consumer -c conf.dev.toml
 │   │   └── proto
 │   │       ├── stream.pb.go
 │   │       └── stream.proto
-│   ├── host
+│   ├── host # get nodes info 
 │   │   ├── host.go
 │   │   └── host_test.go
-│   │── management
+│   ├── management
 │   │   ├── grpc.go
 │   │   ├── rule.go
 │   │   ├── scan.go
@@ -117,15 +134,15 @@ go run main.go consumer -c conf.dev.toml
 │   │       ├── rule.go
 │   │       ├── scan.go
 │   │       └── task.go
-│   ├── scan
+│   ├── scan # define scan tasks here
 │   │   ├── dispatch.go
 │   │   ├── mysql.go
 │   │   ├── redis.go
 │   │   ├── scan.go
 │   │   └── ssh.go
-│   ├── server
+│   ├── server # restful web and graceful shutdown service
 │   │   └── server.go
-│   └── swagger
+│   └── swagger # api docs
 │       ├── docs.go
 │       ├── swagger.json
 │       └── swagger.yaml
@@ -137,7 +154,9 @@ go run main.go consumer -c conf.dev.toml
 ├── main.go
 └── README.md
 ```
+
 ## Architecture
+
 ![img](doc/scan.jpg)
 
 ## Contributing
