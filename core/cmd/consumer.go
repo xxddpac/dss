@@ -9,12 +9,14 @@ import (
 	"dss/core/global"
 	"dss/core/grpc/consumer"
 	"dss/core/host"
+	"dss/core/pprof"
 	"dss/core/router"
 	"dss/core/scan"
 	"dss/core/server"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"
+	_ "net/http/pprof"
 	"os"
 )
 
@@ -45,6 +47,7 @@ func Consumer() *cobra.Command {
 			consumer.Startup(global.Ctx)
 			go host.InitRefreshHost(global.Ctx)
 			go scan.Dispatch()
+			go pprof.Pprof(conf.Consumer.Pprof.Enable, conf.Consumer.Pprof.Port)
 			scan.Init(conf.MaxWorkers, conf.MaxQueue, log.Logger())
 			gin.SetMode(conf.Mode)
 		},

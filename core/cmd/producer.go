@@ -9,11 +9,13 @@ import (
 	"dss/core/global"
 	"dss/core/grpc/producer"
 	"dss/core/host"
+	"dss/core/pprof"
 	"dss/core/router"
 	"dss/core/server"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"
+	_ "net/http/pprof"
 	"os"
 )
 
@@ -36,6 +38,7 @@ func Producer() *cobra.Command {
 			log.Init(&conf.Log)
 			host.RefreshHost()
 			producer.Grpc()
+			go pprof.Pprof(conf.Producer.Pprof.Enable, conf.Producer.Pprof.Port)
 			if err := redis.Init(&conf.Redis); err != nil {
 				log.Fatal("Init redis failed", zap.Error(err))
 			}

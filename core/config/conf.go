@@ -37,11 +37,18 @@ type config struct {
 }
 
 type Consumer struct {
-	Port int
+	Port  int
+	Pprof *pprof
 }
 
 type Producer struct {
 	Port              int
 	WorkChatUploadUrl string
 	WorkChatBotUrl    string
+	Pprof             *pprof
+}
+
+type pprof struct {
+	Enable bool
+	Port   int
 }

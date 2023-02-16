@@ -48,8 +48,14 @@ DataCenter = "dc1"
 
 [consumer]
 Port = 9090
+[consumer.Pprof]
+Enable = true
+Port = 5000
 
 [producer]
 Port = 9091
 WorkChatUploadUrl = "https://qyapi.weixin.qq.com/cgi-bin/webhook/upload_media?key=Your-Key&type=file"
 WorkChatBotUrl = "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=Your-Key"
+[producer.Pprof]
+Enable = true
+Port = 5001
