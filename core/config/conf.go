@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"github.com/BurntSushi/toml"
 	"os"
-	"time"
 )
 
 var (
@@ -38,8 +37,7 @@ type config struct {
 }
 
 type Consumer struct {
-	Port    int
-	TimeOut time.Duration
+	Port int
 }
 
 type Producer struct {

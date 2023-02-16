@@ -4,7 +4,7 @@ import (
 	"dss/common/async"
 	"dss/common/log"
 	"dss/common/utils"
-	"dss/core/config"
+	"dss/common/wp"
 	"dss/core/dao"
 	"dss/core/global"
 	"dss/core/models"
@@ -18,7 +18,6 @@ import (
 var (
 	poolForPortScan *async.WorkerPool
 	poolForDispatch *async.WorkerPool
-	timeout         time.Duration
 	result          = make([]scanInfo, 0)
 	queue           = make(chan scanInfo, 100)
 )
@@ -30,7 +29,6 @@ type scanInfo struct {
 }
 
 func Init(maxWorkers, maxQueue int, log *zap.Logger) {
-	timeout = config.CoreConf.Consumer.TimeOut
 	poolForPortScan = async.NewWorkerPool(maxWorkers, maxQueue, log).Run()
 	poolForDispatch = async.NewWorkerPool(maxWorkers, maxQueue, log).Run()
 	go run()
@@ -57,12 +55,27 @@ func run() {
 }
 
 func (s *scanInfo) Do() {
-	client, err := net.DialTimeout(global.TCP, fmt.Sprintf("%v:%v", s.Host, s.Port), timeout*time.Second)
+	client, err := net.DialTimeout(global.TCP, fmt.Sprintf("%v:%v", s.Host, s.Port), 2*time.Second)
 	if err == nil {
 		_ = client.Close()
-		go dispatch(*s)
+		for _, item := range wp.WeakUserPassList {
+			val, _ := utils.Marshal(WeakPasswordScan{
+				Username: item.UserName,
+				Password: item.Password,
+				scanInfo: scanInfo{
+					Host: s.Host,
+					Port: s.Port,
+				},
+			})
+			if err = dao.Redis.LPush(global.IpScan, val); err != nil {
+				log.Errorf("push msg to redis err:%v", err)
+				continue
+			}
+		}
 		log.InfoF("found host:%s open port:%s", s.Host, s.Port)
-		queue <- *s
+		go func() {
+			queue <- *s
+		}()
 	}
 }
 

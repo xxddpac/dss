@@ -5,6 +5,7 @@ import "context"
 const (
 	TimeUnix      = 100
 	PortScanQueue = "port_scan"
+	IpScan        = "ip_scan"
 	Scan          = "scan"
 	ScanRule      = "scan_rule"
 	GrpcClient    = "grpc_client"
