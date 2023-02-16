@@ -6,5 +6,5 @@ import (
 )
 
 func TestParserWeakPasswordList(t *testing.T) {
-	assert.NotEqual(t, 0, len(WeakPasswordList))
+	assert.NotEqual(t, 0, len(WeakUserPassList))
 }
