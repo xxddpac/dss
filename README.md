@@ -40,6 +40,12 @@ init api docs
 swag init -o core/swagger
 ```
 
+pprof visualization tool
+```bash
+http://producer_ip:5001/debug/pprof/
+http://consumer_ip:5000/debug/pprof/
+```
+
 ### Project structure
 
 ```bash
@@ -126,6 +132,8 @@ swag init -o core/swagger
 │   │   ├── response.go
 │   │   ├── rule.go
 │   │   └── scan.go
+│   ├── pprof # pprof visualization
+│   │   └── pprof.go
 │   ├── router
 │   │   ├── router.go
 │   │   └── v1
