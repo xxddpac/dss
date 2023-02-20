@@ -9,9 +9,10 @@ import (
 type Rule struct {
 	Name       string          `json:"name" bson:"name" binding:"required"`
 	Status     bool            `json:"status" bson:"status" binding:"required"`
-	Type       global.RuleType `json:"type" bson:"type" binding:"required"`
 	TargetHost string          `json:"target_host" bson:"target_host" binding:"required"`
 	TargetPort string          `json:"target_port" bson:"target_port" binding:"required"`
+	ScanItemId []string        `json:"scan_item_id" bson:"scan_item_id" binding:"required"`
+	Type       global.RuleType `json:"type" bson:"type" binding:"required"`
 	Location   string          `json:"location" bson:"location"`
 }
 
