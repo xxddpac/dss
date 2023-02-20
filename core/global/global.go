@@ -8,6 +8,7 @@ const (
 	IpScan        = "ip_scan"
 	Scan          = "scan"
 	ScanRule      = "scan_rule"
+	ScanItem      = "scan_item"
 	GrpcClient    = "grpc_client"
 	SSH           = "22"
 	REDIS         = "6379"
