@@ -12,7 +12,7 @@ require (
 	github.com/shirou/gopsutil/v3 v3.23.1
 	github.com/spf13/cobra v1.6.1
 	github.com/stretchr/testify v1.8.1
-	github.com/swaggo/files v0.0.0-20220728132757-551d4a08d97a
+	github.com/swaggo/files v1.0.0
 	github.com/swaggo/gin-swagger v1.5.3
 	github.com/swaggo/swag v1.8.10
 	github.com/tealeg/xlsx v1.0.5
