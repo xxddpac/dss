@@ -46,7 +46,7 @@ func Consumer() *cobra.Command {
 			}
 			consumer.Startup(global.Ctx)
 			go host.InitRefreshHost(global.Ctx)
-			go scan.Dispatch()
+			//go scan.Dispatch()
 			go pprof.Pprof(conf.Consumer.Pprof.Enable, conf.Consumer.Pprof.Port)
 			scan.Init(conf.MaxWorkers, conf.MaxQueue, log.Logger())
 			gin.SetMode(conf.Mode)

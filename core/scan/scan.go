@@ -4,7 +4,6 @@ import (
 	"dss/common/async"
 	"dss/common/log"
 	"dss/common/utils"
-	"dss/common/wp"
 	"dss/core/dao"
 	"dss/core/global"
 	"dss/core/models"
@@ -58,20 +57,6 @@ func (s *scanInfo) Do() {
 	client, err := net.DialTimeout(global.TCP, fmt.Sprintf("%v:%v", s.Host, s.Port), 2*time.Second)
 	if err == nil {
 		_ = client.Close()
-		for _, item := range wp.WeakUserPassList {
-			val, _ := utils.Marshal(WeakPasswordScan{
-				Username: item.UserName,
-				Password: item.Password,
-				scanInfo: scanInfo{
-					Host: s.Host,
-					Port: s.Port,
-				},
-			})
-			if err = dao.Redis.LPush(global.IpScan, val); err != nil {
-				log.Errorf("push msg to redis err:%v", err)
-				continue
-			}
-		}
 		log.InfoF("found host:%s open port:%s", s.Host, s.Port)
 		go func() {
 			queue <- *s

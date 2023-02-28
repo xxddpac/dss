@@ -30,13 +30,4 @@ func Register(v1 *gin.RouterGroup) {
 	{
 		grpc.GET("client", Grpc.Get) // get all gRPC client info
 	}
-	scanItem := v1.Group("/scan_item")
-	{
-		scanItem.GET("", ScanItem.Get)
-		scanItem.POST("", ScanItem.Post)
-		scanItem.PUT("", ScanItem.Put)
-		scanItem.DELETE("", ScanItem.Delete)
-		scanItem.GET("/query", ScanItem.Query)
-		scanItem.GET("/level/enum", ScanItem.Enum)
-	}
 }
