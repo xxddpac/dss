@@ -26,7 +26,7 @@ func Dispatch() {
 			}
 			switch w.Port {
 			case global.SSH:
-				poolForDispatch.Add(&SSH{*w})
+				//poolForDispatch.Add(&SSH{*w})
 			case global.MYSQL:
 
 			case global.REDIS:

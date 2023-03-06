@@ -9,6 +9,7 @@ import (
 	"dss/core/global"
 	"dss/core/grpc/producer"
 	"dss/core/host"
+	"dss/core/management"
 	"dss/core/pprof"
 	"dss/core/router"
 	"dss/core/server"
@@ -48,6 +49,7 @@ func Producer() *cobra.Command {
 			if err := consul.Init(&conf.Consul); err != nil {
 				log.Fatal("Init consul failed", zap.Error(err))
 			}
+			go management.RunTimeTaskStatusCheck()
 			consul.Register()
 			gin.SetMode(conf.Mode)
 		},

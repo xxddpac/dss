@@ -1,8 +1,8 @@
 package dao
 
 import (
-	"fmt"
 	"dss/common/redis"
+	"fmt"
 	"testing"
 	"time"
 )
@@ -44,4 +44,13 @@ func TestRedis(t *testing.T) {
 		}
 	}()
 	time.Sleep(2 * time.Second)
+}
+
+func TestLuaRun(t *testing.T) {
+	if err := redis.Init(fakeRedisConfig); err != nil {
+		t.Fatal(err)
+	}
+	if err := Redis.LuaRun("dss", 20); err != nil {
+		t.Fatal(err)
+	}
 }

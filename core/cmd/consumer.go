@@ -45,6 +45,7 @@ func Consumer() *cobra.Command {
 				log.Fatal("Init consul failed", zap.Error(err))
 			}
 			consumer.Startup(global.Ctx)
+			go scan.RunTimeUpdateTaskStatus()
 			go host.InitRefreshHost(global.Ctx)
 			//go scan.Dispatch()
 			go pprof.Pprof(conf.Consumer.Pprof.Enable, conf.Consumer.Pprof.Port)

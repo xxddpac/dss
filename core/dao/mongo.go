@@ -3,6 +3,7 @@ package dao
 import (
 	"dss/common/mongo"
 	"github.com/globalsign/mgo/bson"
+	"time"
 )
 
 type Repository struct {
@@ -101,4 +102,11 @@ func (r *Repository) Select(query bson.M, result interface{}) error {
 		return err
 	}
 	return nil
+}
+
+func (r *Repository) SetField(id interface{}, update bson.M) error {
+	update["updated_time"] = time.Now().Unix()
+	client := mongo.GetConn(r.Collection)
+	defer client.Close()
+	return client.Collection().Update(bson.M{"_id": id}, bson.M{"$set": update})
 }

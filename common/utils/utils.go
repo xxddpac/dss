@@ -2,9 +2,11 @@ package utils
 
 import (
 	"encoding/json"
+	"fmt"
 	"net"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -88,4 +90,39 @@ func Exists(path string) bool {
 func WorkingDirectory() string {
 	workingDirectory, _ := os.Getwd()
 	return workingDirectory
+}
+
+func ParsePortRange(val string) (int, int, bool) {
+	var (
+		portStart, portEnd int
+	)
+	portRange := strings.Split(val, "-")
+	if len(portRange) == 2 {
+		portStart = StrToInt(portRange[0])
+		portEnd = StrToInt(portRange[1])
+	}
+	return portStart, portEnd, len(portRange) == 2
+}
+
+func ParseIpRange(val string) (string, int, int, bool) {
+	var (
+		startIp                            string
+		startIpEndSuffix, ipRangeEndSuffix int
+	)
+	ipRange := strings.Split(val, "-")
+	if len(ipRange) == 2 {
+		startIp = ipRange[0]
+		startIpEndSuffix = StrToInt(strings.Split(startIp, ".")[3])
+		ipRangeEndSuffix = StrToInt(ipRange[1])
+	}
+	return startIp, startIpEndSuffix, ipRangeEndSuffix, len(ipRange) == 2
+}
+
+func ExecutedTimeFormat(inSeconds int64) string {
+	if inSeconds == 0 {
+		return ""
+	}
+	minutes := inSeconds / 60
+	seconds := inSeconds % 60
+	return fmt.Sprintf("%dm%ds", minutes, seconds)
 }

@@ -27,3 +27,27 @@ func (r RuleType) String() string {
 		return "未知"
 	}
 }
+
+type TaskStatus int
+
+const (
+	Waiting TaskStatus = iota + 1
+	Running
+	Finished
+	Error
+)
+
+func (t TaskStatus) String() string {
+	switch t {
+	case Waiting:
+		return "等待中"
+	case Running:
+		return "检测中"
+	case Finished:
+		return "已完成"
+	case Error:
+		return "出错"
+	default:
+		return "未知"
+	}
+}

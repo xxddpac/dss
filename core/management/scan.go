@@ -49,8 +49,6 @@ func (*_ScanManager) Get(param models.ScanQuery) (interface{}, error) {
 	}
 	if param.Date != "" {
 		query[doneTime] = param.Date
-	} else {
-		query[doneTime] = time.Now().Format(utils.TimeLayout)
 	}
 	if param.Search != "" {
 		query["$or"] = []bson.M{
@@ -60,14 +58,6 @@ func (*_ScanManager) Get(param models.ScanQuery) (interface{}, error) {
 	}
 	if err := dao.Repo(global.Scan).SelectWithPage(query, param.Page, param.Size, &resp, "-updated_time"); err != nil {
 		return nil, err
-	}
-	if param.Date == "" {
-		if len(resp) == 0 {
-			query[doneTime] = time.Now().AddDate(0, 0, -1).Format(utils.TimeLayout)
-			if err := dao.Repo(global.Scan).SelectWithPage(query, param.Page, param.Size, &resp, "-updated_time"); err != nil {
-				return nil, err
-			}
-		}
 	}
 	result.Size = param.Size
 	result.Page = param.Page
