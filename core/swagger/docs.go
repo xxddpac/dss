@@ -450,6 +450,58 @@ var doc = `{
             }
         },
         "/api/v1/task": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Task"
+                ],
+                "summary": "Get task Info",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Fuzzy Query",
+                        "name": "search",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "1:Waiting,2:Running,3:Finished,4:Error",
+                        "name": "status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Current Page Default:1",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Current Size Default:10",
+                        "name": "size",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    }
+                }
+            },
             "post": {
                 "consumes": [
                     "application/json"
@@ -461,6 +513,43 @@ var doc = `{
                     "Task"
                 ],
                 "summary": "Task Execute",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "rule id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/task/status/enum": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Task"
+                ],
+                "summary": "Get task Status Enum",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -503,6 +592,9 @@ var doc = `{
                 "type"
             ],
             "properties": {
+                "count": {
+                    "type": "integer"
+                },
                 "location": {
                     "type": "string"
                 },

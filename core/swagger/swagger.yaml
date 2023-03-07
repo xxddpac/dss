@@ -10,6 +10,8 @@ definitions:
     type: object
   models.Rule:
     properties:
+      count:
+        type: integer
       location:
         type: string
       name:
@@ -313,7 +315,65 @@ paths:
       tags:
       - Scan
   /api/v1/task:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Fuzzy Query
+        in: query
+        name: search
+        type: string
+      - description: 1:Waiting,2:Running,3:Finished,4:Error
+        in: query
+        name: status
+        type: integer
+      - description: Current Page Default:1
+        in: query
+        name: page
+        type: string
+      - description: Current Size Default:10
+        in: query
+        name: size
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Get task Info
+      tags:
+      - Task
     post:
+      consumes:
+      - application/json
+      parameters:
+      - description: rule id
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: Task Execute
+      tags:
+      - Task
+  /api/v1/task/status/enum:
+    get:
       consumes:
       - application/json
       produces:
@@ -327,7 +387,7 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/models.Response'
-      summary: Task Execute
+      summary: Get task Status Enum
       tags:
       - Task
 swagger: "2.0"
