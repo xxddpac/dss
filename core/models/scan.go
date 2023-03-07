@@ -6,7 +6,6 @@ import (
 )
 
 type Scan struct {
-	RuleId   string `json:"rule_id" bson:"rule_id"`
 	TaskId   string `json:"task_id" bson:"task_id"`
 	Host     string `json:"host" bson:"host"`
 	Port     string `json:"port" bson:"port"`

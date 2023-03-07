@@ -21,50 +21,62 @@ type _TaskManager struct {
 }
 
 func parseRule(r models.RuleInsert, id bson.ObjectId) {
-	_ = dao.Repo(global.ScanTask).SetField(id, bson.M{"status": global.Running})
+	var (
+		ipCount, portCount int
+	)
 	portStart, portEnd, _ := utils.ParsePortRange(r.TargetPort)
+	portCount = portEnd - portStart + 1
+	defer func() {
+		_ = dao.Repo(global.ScanTask).SetField(id, bson.M{"status": global.Running, "count": ipCount * portCount})
+	}()
 	switch r.Type {
 	case global.Single:
 		//192.168.1.1
-		for i := portStart; i <= portEnd; i++ {
-			pushRedis(models.Scan{
-				RuleId:   r.Id.Hex(),
-				TaskId:   id.Hex(),
-				Host:     r.TargetHost,
-				Port:     fmt.Sprintf("%v", i),
-				Location: r.Location,
-			})
-		}
-	case global.Range:
-		//192.168.1.10-30
-		startIp, startIpEndSuffix, ipRangeEndSuffix, _ := utils.ParseIpRange(r.TargetHost)
-		resp := strings.Split(startIp, ".")
-		prefix := fmt.Sprintf("%v.%v.%v.", resp[0], resp[1], resp[2])
-		for i := startIpEndSuffix; i <= ipRangeEndSuffix; i++ {
-			for p := portStart; p <= portEnd; p++ {
-				pushRedis(models.Scan{
-					RuleId:   r.Id.Hex(),
-					TaskId:   id.Hex(),
-					Host:     fmt.Sprintf("%v%v", prefix, i),
-					Port:     fmt.Sprintf("%v", p),
-					Location: r.Location,
-				})
-			}
-		}
-	case global.Cidr:
-		//192.168.1.0/20
-		ipSlice := utils.GetIpListByCidr(r.TargetHost)
-		for _, ip := range ipSlice {
+		ipCount = 1
+		go func() {
 			for i := portStart; i <= portEnd; i++ {
 				pushRedis(models.Scan{
-					RuleId:   r.Id.Hex(),
 					TaskId:   id.Hex(),
-					Host:     ip,
+					Host:     r.TargetHost,
 					Port:     fmt.Sprintf("%v", i),
 					Location: r.Location,
 				})
 			}
-		}
+		}()
+	case global.Range:
+		//192.168.1.10-30
+		startIp, startIpEndSuffix, ipRangeEndSuffix, _ := utils.ParseIpRange(r.TargetHost)
+		ipCount = ipRangeEndSuffix - startIpEndSuffix + 1
+		resp := strings.Split(startIp, ".")
+		prefix := fmt.Sprintf("%v.%v.%v.", resp[0], resp[1], resp[2])
+		go func() {
+			for i := startIpEndSuffix; i <= ipRangeEndSuffix; i++ {
+				for p := portStart; p <= portEnd; p++ {
+					pushRedis(models.Scan{
+						TaskId:   id.Hex(),
+						Host:     fmt.Sprintf("%v%v", prefix, i),
+						Port:     fmt.Sprintf("%v", p),
+						Location: r.Location,
+					})
+				}
+			}
+		}()
+	case global.Cidr:
+		//192.168.1.0/20
+		ipSlice := utils.GetIpListByCidr(r.TargetHost)
+		ipCount = len(ipSlice)
+		go func() {
+			for _, ip := range ipSlice {
+				for i := portStart; i <= portEnd; i++ {
+					pushRedis(models.Scan{
+						TaskId:   id.Hex(),
+						Host:     ip,
+						Port:     fmt.Sprintf("%v", i),
+						Location: r.Location,
+					})
+				}
+			}
+		}()
 	}
 }
 
@@ -87,12 +99,11 @@ func (*_TaskManager) Post(query models.QueryID) error {
 		RuleId: query.ID,
 		Name:   r.Name,
 		Status: global.Waiting,
-		Count:  r.Count,
 	})
 	if err = dao.Repo(global.ScanTask).Insert(task); err != nil {
 		return err
 	}
-	go parseRule(r, task.Id)
+	parseRule(r, task.Id)
 	RunTimeTaskStatusCheck(task.Id)
 	return nil
 }

@@ -28,9 +28,8 @@ type _Rule struct {
 // @Router /api/v1/rule [post]
 func (*_Rule) Post(ctx *gin.Context) {
 	var (
-		g       = models.Gin{Ctx: ctx}
-		body    models.Rule
-		ipCount int
+		g    = models.Gin{Ctx: ctx}
+		body models.Rule
 	)
 	if err := ctx.ShouldBindJSON(&body); err != nil {
 		g.Fail(http.StatusBadRequest, err)
@@ -43,7 +42,6 @@ func (*_Rule) Post(ctx *gin.Context) {
 	switch body.Type {
 	case global.Single:
 		//192.168.1.1
-		ipCount = 1
 		if !utils.ParseIP(body.TargetHost) {
 			g.Fail(http.StatusBadRequest, fmt.Errorf("err target host with single type"))
 			return
@@ -59,14 +57,12 @@ func (*_Rule) Post(ctx *gin.Context) {
 			g.Fail(http.StatusBadRequest, fmt.Errorf("err target host with range type"))
 			return
 		}
-		ipCount = ipRangeEndSuffix - startIpEndSuffix + 1
 	case global.Cidr:
 		//192.168.1.0/20
 		if !utils.ParseCidr(body.TargetHost) {
 			g.Fail(http.StatusBadRequest, fmt.Errorf("err target host with cidr type"))
 			return
 		}
-		ipCount = len(utils.GetIpListByCidr(body.TargetHost))
 	}
 	//1-4000
 	start, end, b := utils.ParsePortRange(body.TargetPort)
@@ -78,8 +74,6 @@ func (*_Rule) Post(ctx *gin.Context) {
 		g.Fail(http.StatusBadRequest, fmt.Errorf("invalid port range value"))
 		return
 	}
-	portCount := end - start + 1
-	body.Count = portCount * ipCount
 	if err := management.RuleManager.Post(body); err != nil {
 		g.Fail(http.StatusBadRequest, err)
 		return

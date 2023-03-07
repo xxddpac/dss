@@ -54,7 +54,6 @@ func (s *scanInfo) Do() {
 		Location: s.Location,
 		Port:     s.Port,
 		TaskId:   s.TaskId,
-		RuleId:   s.RuleId,
 		DoneTime: time.Now().Format(utils.TimeLayout),
 	}
 	client, err := net.DialTimeout(global.TCP, fmt.Sprintf("%v:%v", s.Host, s.Port), 2*time.Second)
