@@ -16,6 +16,7 @@ func Register(v1 *gin.RouterGroup) {
 	task := v1.Group("/task")
 	{
 		task.POST("", Task.Post) // push task to redis
+		task.GET("", Task.Get)
 	}
 	//scan result
 	scan := v1.Group("/scan")

@@ -30,3 +30,50 @@ func TaskInsertFunc(t Task) *TaskInsert {
 		},
 	}
 }
+
+type TaskQuery struct {
+	QueryPage
+	Status global.TaskStatus `form:"status"`
+	Search string            `form:"search"`
+}
+
+func TaskQueryFunc() *TaskQuery {
+	return &TaskQuery{
+		QueryPage: QueryPage{Page: 1, Size: 10},
+	}
+}
+
+type TaskQueryResult struct {
+	QueryResult
+	Items []TaskQueryResultDto `json:"items"`
+}
+
+type TaskQueryResultDto struct {
+	TaskQueryDto
+	StatusDesc string `json:"status_desc"`
+}
+
+type TaskQueryDto struct {
+	BaseDto
+	Task
+}
+
+func TaskQueryResultFunc(t []*TaskInsert) []TaskQueryResultDto {
+	var (
+		resp   TaskQueryResultDto
+		result []TaskQueryResultDto
+	)
+	for _, item := range t {
+		resp.TaskQueryDto = *item.ToDto()
+		resp.Task = item.Task
+		resp.StatusDesc = item.Status.String()
+		result = append(result, resp)
+	}
+	return result
+}
+
+func (t *TaskInsert) ToDto() *TaskQueryDto {
+	dto := &TaskQueryDto{}
+	dto.BaseDto = *(&t.BasePo).ToDto()
+	return dto
+}

@@ -150,3 +150,28 @@ func RunTimeTaskStatusCheck(ids ...bson.ObjectId) {
 		}(task)
 	}
 }
+
+func (*_TaskManager) Get(param models.TaskQuery) (interface{}, error) {
+	var (
+		result models.TaskQueryResult
+		resp   []*models.TaskInsert
+		query  = bson.M{}
+	)
+	if param.Status != 0 {
+		query["status"] = param.Status
+	}
+	if param.Search != "" {
+		query["$or"] = []bson.M{
+			{"name": bson.M{"$regex": param.Search, "$options": "$i"}},
+		}
+	}
+	if err := dao.Repo(global.ScanTask).SelectWithPage(query, param.Page, param.Size, &resp, "-updated_time"); err != nil {
+		return nil, err
+	}
+	result.Size = param.Size
+	result.Page = param.Page
+	result.Total = dao.Repo(global.ScanTask).Count(query)
+	result.Items = models.TaskQueryResultFunc(resp)
+	result.Pages = int(math.Ceil(float64(result.Total) / float64(param.Size)))
+	return result, nil
+}

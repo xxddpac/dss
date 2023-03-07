@@ -35,3 +35,20 @@ func (*_Task) Post(ctx *gin.Context) {
 	}
 	g.Success(nil)
 }
+
+func (*_Task) Get(ctx *gin.Context) {
+	var (
+		g     = models.Gin{Ctx: ctx}
+		param = models.TaskQueryFunc()
+	)
+	if err := ctx.ShouldBindQuery(&param); err != nil {
+		g.Fail(http.StatusBadRequest, err)
+		return
+	}
+	resp, err := management.TaskManager.Get(*param)
+	if err != nil {
+		g.Fail(http.StatusBadRequest, err)
+		return
+	}
+	g.Success(resp)
+}
