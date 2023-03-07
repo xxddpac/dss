@@ -52,3 +52,10 @@ func (*_Task) Get(ctx *gin.Context) {
 	}
 	g.Success(resp)
 }
+
+func (*_Task) Enum(ctx *gin.Context) {
+	var (
+		g = models.Gin{Ctx: ctx}
+	)
+	g.Success(management.TaskManager.Enum())
+}

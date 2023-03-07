@@ -175,3 +175,16 @@ func (*_TaskManager) Get(param models.TaskQuery) (interface{}, error) {
 	result.Pages = int(math.Ceil(float64(result.Total) / float64(param.Size)))
 	return result, nil
 }
+
+func (*_TaskManager) Enum() interface{} {
+	var (
+		res = make(map[string][]map[string]interface{})
+	)
+	res["status"] = append(res["status"],
+		map[string]interface{}{"key": global.Waiting.String(), "value": global.Waiting},
+		map[string]interface{}{"key": global.Running.String(), "value": global.Running},
+		map[string]interface{}{"key": global.Finished.String(), "value": global.Finished},
+		map[string]interface{}{"key": global.Error.String(), "value": global.Error},
+	)
+	return res
+}
