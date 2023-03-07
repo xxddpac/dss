@@ -14,7 +14,8 @@ import (
 )
 
 var (
-	TaskManager *_TaskManager
+	TaskManager          *_TaskManager
+	incompleteTaskStatus = []global.TaskStatus{global.Running, global.Waiting}
 )
 
 type _TaskManager struct {
@@ -88,6 +89,9 @@ func (*_TaskManager) Post(query models.QueryID) error {
 	if !bson.IsObjectIdHex(query.ID) {
 		return fmt.Errorf("invalid ObjectIdHex")
 	}
+	if dao.Repo(global.ScanTask).Count(bson.M{"status": bson.M{"$in": incompleteTaskStatus}, "rule_id": query.ID}) != 0 {
+		return fmt.Errorf("the task has not been completed. try again later")
+	}
 	if err = dao.Repo(global.ScanRule).SelectById(dao.BsonId(query.ID), &r); err != nil {
 		return err
 	}
@@ -118,9 +122,8 @@ func pushRedis(scan models.Scan) {
 func RunTimeTaskStatusCheck(ids ...bson.ObjectId) {
 	log.Info("start runTimeTaskStatusCheck...")
 	var (
-		query                = bson.M{}
-		taskSlice            []models.TaskInsert
-		incompleteTaskStatus = []global.TaskStatus{global.Running, global.Waiting}
+		query     = bson.M{}
+		taskSlice []models.TaskInsert
 	)
 	if len(ids) != 0 {
 		query["_id"] = ids[0]
