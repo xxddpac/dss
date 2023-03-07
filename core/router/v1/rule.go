@@ -2,11 +2,13 @@ package v1
 
 import (
 	"dss/common/utils"
+	"dss/core/dao"
 	"dss/core/global"
 	"dss/core/management"
 	"dss/core/models"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/globalsign/mgo/bson"
 	"net/http"
 )
 
@@ -32,6 +34,10 @@ func (*_Rule) Post(ctx *gin.Context) {
 	)
 	if err := ctx.ShouldBindJSON(&body); err != nil {
 		g.Fail(http.StatusBadRequest, err)
+		return
+	}
+	if dao.Repo(global.ScanRule).Count(bson.M{"target_host": body.TargetHost}) != 0 {
+		g.Fail(http.StatusBadRequest, fmt.Errorf("target host %s already exists ", body.TargetHost))
 		return
 	}
 	switch body.Type {
