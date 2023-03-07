@@ -592,9 +592,6 @@ var doc = `{
                 "type"
             ],
             "properties": {
-                "count": {
-                    "type": "integer"
-                },
                 "location": {
                     "type": "string"
                 },

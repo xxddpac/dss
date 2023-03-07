@@ -10,8 +10,6 @@ definitions:
     type: object
   models.Rule:
     properties:
-      count:
-        type: integer
       location:
         type: string
       name:

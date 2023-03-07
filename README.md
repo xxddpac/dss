@@ -33,6 +33,7 @@ open api docs
 ```bash
 http://producer_ip:9091/swagger/index.html
 ```
+![img](doc/api.png)
 
 init api docs
 
@@ -46,14 +47,35 @@ http://producer_ip:5001/debug/pprof/
 http://consumer_ip:5000/debug/pprof/
 ```
 
+### Example
+```bash
+add new rule
+```
+![img](doc/rule.png)
+
+```bash
+start scan task with rule id
+```
+![img](doc/task.png)
+
+```bash
+check task status
+```
+![img](doc/status_running.png)
+
+![img](doc/status_finished.png)
+
+```bash
+view scan results and others see api docs
+```
 ### Project structure
 
 ```bash
 ├── common
-│   ├── async # init goroutine pool
+│   ├── async
 │   │   ├── worker.go
 │   │   └── workerpool.go
-│   ├── cert # gRPC certificate
+│   ├── cert
 │   │   ├── ca.key
 │   │   ├── ca.pem
 │   │   ├── ca.srl
@@ -64,7 +86,7 @@ http://consumer_ip:5000/debug/pprof/
 │   │   ├── server.csr
 │   │   ├── server.key
 │   │   └── server.pem
-│   ├── consul # consul register service
+│   ├── consul
 │   │   ├── consul.go
 │   │   └── consul_test.go
 │   ├── http
@@ -79,22 +101,25 @@ http://consumer_ip:5000/debug/pprof/
 │   ├── redis
 │   │   ├── config.go
 │   │   └── redis.go
-│   ├── utils # public tools
+│   ├── utils
 │   │   ├── utils.go
 │   │   ├── utils_test.go
 │   │   ├── xlsx.go
 │   │   └── xlsx_test.go
-│   └── wp # weak password list
+│   └── wp
 │       ├── list
 │       ├── parser.go
 │       └── parser_test.go
-├── conf.dev.toml  # development configuration
-├── conf.prod.toml # production configuration
+├── conf.dev.toml
+├── conf.prod.toml
 ├── core
-│   ├── cmd # cli run 
+│   ├── buffer
+│   │   ├── buffer.go
+│   │   └── buffer_test.go
+│   ├── cmd
 │   │   ├── consumer.go
 │   │   └── producer.go
-│   ├── config # init conf.*.toml
+│   ├── config
 │   │   └── conf.go
 │   ├── dao
 │   │   ├── mongo.go
@@ -102,7 +127,7 @@ http://consumer_ip:5000/debug/pprof/
 │   │   ├── redis.go
 │   │   ├── redis_test.go
 │   │   └── repo.go
-│   ├── discover # consul discover service
+│   ├── discover
 │   │   └── discover.go
 │   ├── errors
 │   │   ├── business_error.go
@@ -110,7 +135,7 @@ http://consumer_ip:5000/debug/pprof/
 │   ├── global
 │   │   ├── enum.go
 │   │   └── global.go
-│   ├── grpc # gRPC server and client
+│   ├── grpc
 │   │   ├── consumer
 │   │   │   └── client.go
 │   │   ├── producer
@@ -118,7 +143,7 @@ http://consumer_ip:5000/debug/pprof/
 │   │   └── proto
 │   │       ├── stream.pb.go
 │   │       └── stream.proto
-│   ├── host # get nodes info 
+│   ├── host
 │   │   ├── host.go
 │   │   └── host_test.go
 │   ├── management
@@ -131,8 +156,9 @@ http://consumer_ip:5000/debug/pprof/
 │   │   ├── models.go
 │   │   ├── response.go
 │   │   ├── rule.go
-│   │   └── scan.go
-│   ├── pprof # pprof visualization
+│   │   ├── scan.go
+│   │   └── task.go
+│   ├── pprof
 │   │   └── pprof.go
 │   ├── router
 │   │   ├── router.go
@@ -142,20 +168,25 @@ http://consumer_ip:5000/debug/pprof/
 │   │       ├── rule.go
 │   │       ├── scan.go
 │   │       └── task.go
-│   ├── scan # define scan tasks here
+│   ├── scan
 │   │   ├── dispatch.go
 │   │   ├── mysql.go
 │   │   ├── redis.go
 │   │   ├── scan.go
 │   │   └── ssh.go
-│   ├── server # restful web and graceful shutdown service
+│   ├── server
 │   │   └── server.go
-│   └── swagger # api docs
+│   └── swagger
 │       ├── docs.go
 │       ├── swagger.json
 │       └── swagger.yaml
 ├── doc
-│   └── scan.jpg
+│   ├── api.png
+│   ├── rule.png
+│   ├── scan.png
+│   ├── status_finished.jpg
+│   ├── status_running.jpg
+│   └── task.png
 ├── go.mod
 ├── go.sum
 ├── LICENSE
