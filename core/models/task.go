@@ -11,6 +11,19 @@ type TaskParam struct {
 	RunType global.TaskRunType `form:"run_type" binding:"required"`
 }
 
+type ScanQueryByID struct {
+	QueryID
+	ScanQuery
+}
+
+func ScanQueryByIDFunc() *ScanQueryByID {
+	return &ScanQueryByID{
+		ScanQuery: ScanQuery{
+			QueryPage: QueryPage{Page: 1, Size: 10},
+		},
+	}
+}
+
 type Task struct {
 	RuleId       string             `json:"rule_id" bson:"rule_id"`
 	Name         string             `json:"name" bson:"name"`

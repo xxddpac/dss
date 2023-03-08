@@ -15,6 +15,7 @@ func Register(v1 *gin.RouterGroup) {
 	{
 		task.POST("", Task.Post)
 		task.GET("", Task.Get)
+		task.GET("query", Task.Query)
 		task.GET("enum", Task.Enum)
 	}
 	scan := v1.Group("/scan")

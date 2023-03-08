@@ -82,3 +82,20 @@ func (*_Task) Enum(ctx *gin.Context) {
 	)
 	g.Success(management.TaskManager.Enum())
 }
+
+func (*_Task) Query(ctx *gin.Context) {
+	var (
+		g     = models.Gin{Ctx: ctx}
+		param = models.ScanQueryByIDFunc()
+	)
+	if err := ctx.ShouldBindQuery(&param); err != nil {
+		g.Fail(http.StatusBadRequest, err)
+		return
+	}
+	resp, err := management.TaskManager.Query(*param)
+	if err != nil {
+		g.Fail(http.StatusBadRequest, err)
+		return
+	}
+	g.Success(resp)
+}

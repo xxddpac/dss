@@ -214,3 +214,33 @@ func (*_TaskManager) Enum() interface{} {
 	)
 	return res
 }
+
+func (*_TaskManager) Query(param models.ScanQueryByID) (interface{}, error) {
+	var (
+		result models.ScanQueryResult
+		resp   []*models.ScanInsert
+		query  = bson.M{}
+	)
+	query["task_id"] = param.QueryID.ID
+	if param.Location != "" {
+		query[location] = param.Location
+	}
+	if param.Date != "" {
+		query[doneTime] = param.Date
+	}
+	if param.Search != "" {
+		query["$or"] = []bson.M{
+			{"host": bson.M{"$regex": param.Search, "$options": "$i"}},
+			{"port": bson.M{"$regex": param.Search, "$options": "$i"}},
+		}
+	}
+	if err := dao.Repo(global.Scan).SelectWithPage(query, param.Page, param.Size, &resp, "-updated_time"); err != nil {
+		return nil, err
+	}
+	result.Size = param.Size
+	result.Page = param.Page
+	result.Total = dao.Repo(global.Scan).Count(query)
+	result.Items = models.ScanQueryResultFunc(resp)
+	result.Pages = int(math.Ceil(float64(result.Total) / float64(param.Size)))
+	return result, nil
+}
