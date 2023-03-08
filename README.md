@@ -28,7 +28,7 @@ on multiple consumer nodes
 go run main.go consumer -c conf.dev.toml
 ```
 
-open api docs
+api docs
 
 ```bash
 http://producer_ip:9091/swagger/index.html
@@ -47,27 +47,6 @@ http://producer_ip:5001/debug/pprof/
 http://consumer_ip:5000/debug/pprof/
 ```
 
-### Example
-```bash
-add new rule
-```
-![img](doc/rule.png)
-
-```bash
-start scan task with rule id
-```
-![img](doc/task.png)
-
-```bash
-check task status
-```
-![img](doc/status_running.png)
-
-![img](doc/status_finished.png)
-
-```bash
-view scan results and others see api docs
-```
 ### Project structure
 
 ```bash
@@ -182,11 +161,7 @@ view scan results and others see api docs
 │       └── swagger.yaml
 ├── doc
 │   ├── api.png
-│   ├── rule.png
-│   ├── scan.png
-│   ├── status_finished.jpg
-│   ├── status_running.jpg
-│   └── task.png
+│   └── scan.jpg
 ├── go.mod
 ├── go.sum
 ├── LICENSE
