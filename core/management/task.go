@@ -144,12 +144,16 @@ func RunTimeTaskStatusCheck(ids ...bson.ObjectId) {
 			for {
 				select {
 				case <-ticker.C:
-					result, err := dao.Redis.Get(task.Id.Hex())
+					taskFinishedCount, err := dao.Redis.IsExistsOrGet(task.Id.Hex())
 					if err != nil {
 						log.Errorf("query key:%s from redis err:%s", task.Id.Hex(), err)
 						continue
 					}
-					taskFinishedCount := utils.StrToInt(result)
+					if taskFinishedCount == 0 {
+						// key expire
+						_ = dao.Repo(global.ScanTask).SetField(task.Id, bson.M{"status": global.Error})
+						return
+					}
 					_ = dao.Repo(global.ScanTask).SetField(task.Id, bson.M{"executed_time": utils.ExecutedTimeFormat(time.Now().Unix() - task.CreatedTime),
 						"progress": fmt.Sprintf("%v%%", math.Round(float64(taskFinishedCount)/float64(task.Count)*100))})
 					log.InfoF("task id:%s,total count :%d,completed :%d", task.Id.Hex(), task.Count, taskFinishedCount)

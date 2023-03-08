@@ -59,7 +59,7 @@ func (s *scanInfo) Do() {
 	client, err := net.DialTimeout(global.TCP, fmt.Sprintf("%v:%v", s.Host, s.Port), 2*time.Second)
 	if err == nil {
 		_ = client.Close()
-		//log.InfoF("found host:%s open port:%s", s.Host, s.Port)
+		log.InfoF("found host:%s open port:%s", s.Host, s.Port)
 		if err = dao.Repo(global.Scan).Insert(models.ScanInsertFunc(item)); err != nil {
 			log.Errorf("insert scan result to mongo err:%s", err)
 		}

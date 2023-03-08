@@ -3,6 +3,7 @@ package dao
 import (
 	"context"
 	"dss/common/redis"
+	"dss/common/utils"
 	_redis "github.com/go-redis/redis"
 	uuid "github.com/satori/go.uuid"
 	"sync"
@@ -79,11 +80,11 @@ func (r *_Redis) LuaRun(key string, count int) error {
 	script := _redis.NewScript(`
 		if redis.call("exists",KEYS[1]) == 0 then
 			redis.call("set",KEYS[1],ARGV[1])
-			redis.call("expire",KEYS[1],3600)
+			redis.call("expire",KEYS[1],60)
 		else
 			local value = redis.call("get",KEYS[1])
 			redis.call("set",KEYS[1],tonumber(value) + ARGV[1])
-			redis.call("expire",KEYS[1],3600)
+			redis.call("expire",KEYS[1],60)
 		end
 	`)
 	if err := script.Run(conn, []string{key}, count).Err(); err != nil && err != _redis.Nil {
@@ -98,4 +99,23 @@ func (r *_Redis) Get(key string) (string, error) {
 	conn := redis.GetConn(ctx)
 	resp := conn.Get(key)
 	return resp.Result()
+}
+
+func (r *_Redis) IsExistsOrGet(key string) (int, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), queryTimeout)
+	defer cancel()
+	conn := redis.GetConn(ctx)
+	script := _redis.NewScript(` 
+		if redis.call("exists",KEYS[1]) == 0 then
+			return "0"
+		else
+			local value = redis.call("get",KEYS[1])
+			return value
+		end
+	`)
+	resp, err := script.Run(conn, []string{key}).Result()
+	if err != nil {
+		return -1, err
+	}
+	return utils.StrToInt(resp.(string)), nil
 }

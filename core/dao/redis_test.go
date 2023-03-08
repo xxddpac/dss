@@ -54,3 +54,14 @@ func TestLuaRun(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+func TestIsExistsOrGet(t *testing.T) {
+	if err := redis.Init(fakeRedisConfig); err != nil {
+		t.Fatal(err)
+	}
+	resp, err := Redis.IsExistsOrGet("dss")
+	if err != nil {
+		t.Fatal(err)
+	}
+	fmt.Println(resp)
+}
