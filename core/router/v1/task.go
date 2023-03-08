@@ -83,6 +83,20 @@ func (*_Task) Enum(ctx *gin.Context) {
 	g.Success(management.TaskManager.Enum())
 }
 
+// Query
+// @Summary 根据任务ID查询对应扫描结果
+// @Tags Task
+// @Accept  json
+// @Produce  json
+// @Param id query string true "任务ID"
+// @Param search query string false "模糊查询"
+// @Param location query string false "根据规则定义的location筛选扫描结果"
+// @Param date query string false "根据日期(year-month-day)筛选扫描结果"
+// @Param page query string false "当前页数,默认值:1"
+// @Param size query string false "当前条数,默认值:10"
+// @Success 200 {object} models.Response
+// @Failure 400 {object} models.Response
+// @Router /api/v1/task/query [get]
 func (*_Task) Query(ctx *gin.Context) {
 	var (
 		g     = models.Gin{Ctx: ctx}

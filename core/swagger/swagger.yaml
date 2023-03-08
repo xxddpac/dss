@@ -396,4 +396,48 @@ paths:
       summary: 获取任务所有枚举信息
       tags:
       - Task
+  /api/v1/task/query:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 任务ID
+        in: query
+        name: id
+        required: true
+        type: string
+      - description: 模糊查询
+        in: query
+        name: search
+        type: string
+      - description: 根据规则定义的location筛选扫描结果
+        in: query
+        name: location
+        type: string
+      - description: 根据日期(year-month-day)筛选扫描结果
+        in: query
+        name: date
+        type: string
+      - description: 当前页数,默认值:1
+        in: query
+        name: page
+        type: string
+      - description: 当前条数,默认值:10
+        in: query
+        name: size
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Response'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/models.Response'
+      summary: 根据任务ID查询对应扫描结果
+      tags:
+      - Task
 swagger: "2.0"

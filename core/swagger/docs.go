@@ -578,6 +578,73 @@ var doc = `{
                     }
                 }
             }
+        },
+        "/api/v1/task/query": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Task"
+                ],
+                "summary": "根据任务ID查询对应扫描结果",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "任务ID",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "模糊查询",
+                        "name": "search",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "根据规则定义的location筛选扫描结果",
+                        "name": "location",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "根据日期(year-month-day)筛选扫描结果",
+                        "name": "date",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "当前页数,默认值:1",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "当前条数,默认值:10",
+                        "name": "size",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/models.Response"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
