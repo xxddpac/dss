@@ -39,7 +39,7 @@ func (*_Task) Post(ctx *gin.Context) {
 }
 
 // Get
-// @Summary Get 获取任务信息(执行时间、执行进度、执行状态、任务类型)
+// @Summary 获取任务信息(执行时间、执行进度、执行状态、任务类型)
 // @Tags Task
 // @Accept  json
 // @Produce  json

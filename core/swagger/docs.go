@@ -460,7 +460,7 @@ var doc = `{
                 "tags": [
                     "Task"
                 ],
-                "summary": "Get 获取任务信息(执行时间、执行进度、执行状态、任务类型)",
+                "summary": "获取任务信息(执行时间、执行进度、执行状态、任务类型)",
                 "parameters": [
                     {
                         "type": "string",

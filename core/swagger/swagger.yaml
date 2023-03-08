@@ -347,7 +347,7 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/models.Response'
-      summary: Get 获取任务信息(执行时间、执行进度、执行状态、任务类型)
+      summary: 获取任务信息(执行时间、执行进度、执行状态、任务类型)
       tags:
       - Task
     post:
