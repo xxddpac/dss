@@ -7,12 +7,13 @@ import (
 )
 
 type Task struct {
-	RuleId       string            `json:"rule_id" bson:"rule_id"`
-	Name         string            `json:"name" bson:"name"`
-	Status       global.TaskStatus `json:"status" bson:"status"`
-	Count        int               `json:"count" bson:"count"`
-	Progress     string            `json:"progress" bson:"progress"`
-	ExecutedTime string            `json:"executed_time" bson:"executed_time"`
+	RuleId       string             `json:"rule_id" bson:"rule_id"`
+	Name         string             `json:"name" bson:"name"`
+	Status       global.TaskStatus  `json:"status" bson:"status"`
+	Count        int                `json:"count" bson:"count"`
+	Progress     string             `json:"progress" bson:"progress"`
+	ExecutedTime string             `json:"executed_time" bson:"executed_time"`
+	RunType      global.TaskRunType `json:"run_type" bson:"run_type"`
 }
 
 type TaskInsert struct {

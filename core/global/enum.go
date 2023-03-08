@@ -51,3 +51,21 @@ func (t TaskStatus) String() string {
 		return "未知"
 	}
 }
+
+type TaskRunType int
+
+const (
+	Auto TaskRunType = iota + 1
+	Manual
+)
+
+func (t TaskRunType) String() string {
+	switch t {
+	case Auto:
+		return "任务调度执行"
+	case Manual:
+		return "手动执行"
+	default:
+		return "未知"
+	}
+}
