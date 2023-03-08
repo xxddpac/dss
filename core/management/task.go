@@ -208,5 +208,9 @@ func (*_TaskManager) Enum() interface{} {
 		map[string]interface{}{"key": global.Finished.String(), "value": global.Finished},
 		map[string]interface{}{"key": global.Error.String(), "value": global.Error},
 	)
+	res["run_type"] = append(res["run_type"],
+		map[string]interface{}{"key": global.Auto.String(), "value": global.Auto},
+		map[string]interface{}{"key": global.Manual.String(), "value": global.Manual},
+	)
 	return res
 }

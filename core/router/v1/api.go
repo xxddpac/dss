@@ -6,18 +6,18 @@ func Register(v1 *gin.RouterGroup) {
 	// this rule defines the scanning host and port
 	rule := v1.Group("/rule")
 	{
-		rule.POST("", Rule.Post)          // add rule
-		rule.GET("", Rule.Get)            // list rule
-		rule.PUT("", Rule.Put)            // modify rule
-		rule.DELETE("", Rule.Delete)      // delete rule
-		rule.GET("/type/enum", Rule.Enum) // display rule type enum
+		rule.POST("", Rule.Post)     // add rule
+		rule.GET("", Rule.Get)       // list rule
+		rule.PUT("", Rule.Put)       // modify rule
+		rule.DELETE("", Rule.Delete) // delete rule
+		rule.GET("enum", Rule.Enum)  // display rule type enum
 	}
 	// task scheduler
 	task := v1.Group("/task")
 	{
 		task.POST("", Task.Post) // push task to redis
 		task.GET("", Task.Get)
-		task.GET("/status/enum", Task.Enum)
+		task.GET("enum", Task.Enum)
 	}
 	//scan result
 	scan := v1.Group("/scan")
