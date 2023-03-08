@@ -13,15 +13,15 @@ type _Scan struct {
 }
 
 // Get
-// @Summary Get Scan Result
+// @Summary 获取扫描结果列表
 // @Tags Scan
 // @Accept  json
 // @Produce  json
-// @Param search query string false "Fuzzy Query"
-// @Param location query string false "Location Select"
-// @Param date query string false "Date Select"
-// @Param page query string false "Current Page Default:1"
-// @Param size query string false "Current Size Default:10"
+// @Param search query string false "模糊查询"
+// @Param location query string false "根据规则定义的location筛选扫描结果"
+// @Param date query string false "根据日期(year-month-day)筛选扫描结果"
+// @Param page query string false "当前页数,默认值:1"
+// @Param size query string false "当前条数,默认值:10"
 // @Success 200 {object} models.Response
 // @Failure 400 {object} models.Response
 // @Router /api/v1/scan [get]
@@ -43,7 +43,7 @@ func (*_Scan) Get(ctx *gin.Context) {
 }
 
 // Remind
-// @Summary Compare yesterday with today,if new port open in today will notify by workChat
+// @Summary 作为计划任务每日执行,对比今日与昨日是否有新增端口开放,若有则通过企业微信发送提醒
 // @Tags Scan
 // @Accept  json
 // @Produce  json
@@ -59,7 +59,7 @@ func (*_Scan) Remind(ctx *gin.Context) {
 }
 
 // Clear
-// @Summary Clear data more than 7 days
+// @Summary 作为计划任务每日执行,只保留最近7天扫描结果
 // @Tags Scan
 // @Accept  json
 // @Produce  json
@@ -75,7 +75,7 @@ func (*_Scan) Clear(ctx *gin.Context) {
 }
 
 // Trend
-// @Summary last 7 days scan trend
+// @Summary 最近7天开放端口数量趋势
 // @Tags Scan
 // @Accept  json
 // @Produce  json
@@ -95,7 +95,7 @@ func (*_Scan) Trend(ctx *gin.Context) {
 }
 
 // Location
-// @Summary GroupBy Location
+// @Summary 获取规则提供location作为查询参数
 // @Tags Scan
 // @Accept  json
 // @Produce  json

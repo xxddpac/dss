@@ -41,15 +41,15 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: Fuzzy Query
+      - description: 模糊查询
         in: query
         name: search
         type: string
-      - description: Current Page Default:1
+      - description: 当前页数,默认值:1
         in: query
         name: page
         type: string
-      - description: Current Size Default:10
+      - description: 当前条数,默认值:10
         in: query
         name: size
         type: string
@@ -64,7 +64,7 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/models.Response'
-      summary: Get Grpc Client
+      summary: 获取gRPC客户端信息(IPV4、系统类型、系统版本、主机名、是否在线)
       tags:
       - Grpc
   /api/v1/rule:
@@ -72,7 +72,7 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: Rule ID
+      - description: 规则ID
         in: query
         name: id
         required: true
@@ -88,30 +88,30 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/models.Response'
-      summary: Delete Rule By ID
+      summary: 根据ID删除规则
       tags:
       - Rule
     get:
       consumes:
       - application/json
       parameters:
-      - description: Fuzzy Query
+      - description: 模糊查询
         in: query
         name: search
         type: string
-      - description: Rule Type 1:Single 2:Range 3:CIDR
+      - description: 枚举类型,1:单个IP类型 2:连续范围IP类型 3:网段类型
         in: query
         name: type
         type: integer
-      - description: Rule Status true/false
+      - description: 状态查询,true/false
         in: query
         name: status
         type: string
-      - description: Current Page Default:1
+      - description: 当前页数,默认值:1
         in: query
         name: page
         type: string
-      - description: Current Size Default:10
+      - description: 当前条数,默认值:10
         in: query
         name: size
         type: string
@@ -126,14 +126,14 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/models.Response'
-      summary: Get Rule List
+      summary: 获取规则列表
       tags:
       - Rule
     post:
       consumes:
       - application/json
       parameters:
-      - description: Request Body
+      - description: 规则请求体
         in: body
         name: param
         required: true
@@ -150,19 +150,19 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/models.Response'
-      summary: Add New Rule
+      summary: 创建规则
       tags:
       - Rule
     put:
       consumes:
       - application/json
       parameters:
-      - description: Rule ID
+      - description: 规则ID
         in: query
         name: id
         required: true
         type: string
-      - description: Request Body
+      - description: 规则请求体
         in: body
         name: param
         required: true
@@ -179,10 +179,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/models.Response'
-      summary: Modify Rule By ID
+      summary: 根据ID修改规则
       tags:
       - Rule
-  /api/v1/rule/type/enum:
+  /api/v1/rule/enum:
     get:
       consumes:
       - application/json
@@ -197,7 +197,7 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/models.Response'
-      summary: Display rule type enum
+      summary: 获取规则所有枚举信息
       tags:
       - Rule
   /api/v1/scan:
@@ -205,23 +205,23 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: Fuzzy Query
+      - description: 模糊查询
         in: query
         name: search
         type: string
-      - description: Location Select
+      - description: 根据规则定义的location筛选扫描结果
         in: query
         name: location
         type: string
-      - description: Date Select
+      - description: 根据日期(year-month-day)筛选扫描结果
         in: query
         name: date
         type: string
-      - description: Current Page Default:1
+      - description: 当前页数,默认值:1
         in: query
         name: page
         type: string
-      - description: Current Size Default:10
+      - description: 当前条数,默认值:10
         in: query
         name: size
         type: string
@@ -236,7 +236,7 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/models.Response'
-      summary: Get Scan Result
+      summary: 获取扫描结果列表
       tags:
       - Scan
   /api/v1/scan/clear:
@@ -254,7 +254,7 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/models.Response'
-      summary: Clear data more than 7 days
+      summary: 作为计划任务每日执行,只保留最近7天扫描结果
       tags:
       - Scan
   /api/v1/scan/location:
@@ -272,7 +272,7 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/models.Response'
-      summary: GroupBy Location
+      summary: 获取规则提供location作为查询参数
       tags:
       - Scan
   /api/v1/scan/remind:
@@ -290,8 +290,7 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/models.Response'
-      summary: Compare yesterday with today,if new port open in today will notify
-        by workChat
+      summary: 作为计划任务每日执行,对比今日与昨日是否有新增端口开放,若有则通过企业微信发送提醒
       tags:
       - Scan
   /api/v1/scan/trend:
@@ -309,7 +308,7 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/models.Response'
-      summary: last 7 days scan trend
+      summary: 最近7天开放端口数量趋势
       tags:
       - Scan
   /api/v1/task:
@@ -317,19 +316,23 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: Fuzzy Query
+      - description: 模糊查询
         in: query
         name: search
         type: string
-      - description: 1:Waiting,2:Running,3:Finished,4:Error
+      - description: 任务状态枚举,1:等待中,2:检测中,3:已完成,4:出错
         in: query
         name: status
         type: integer
-      - description: Current Page Default:1
+      - description: 任务类型枚举,1:计划任务调度执行,2:手动执行
+        in: query
+        name: run_type
+        type: integer
+      - description: 当前页数,默认值:1
         in: query
         name: page
         type: string
-      - description: Current Size Default:10
+      - description: 当前条数,默认值:10
         in: query
         name: size
         type: string
@@ -344,18 +347,23 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/models.Response'
-      summary: Get task Info
+      summary: Get 获取任务信息(执行时间、执行进度、执行状态、任务类型)
       tags:
       - Task
     post:
       consumes:
       - application/json
       parameters:
-      - description: rule id
+      - description: 规则ID
         in: query
         name: id
         required: true
         type: string
+      - description: 任务类型枚举,1:计划任务调度执行,2:手动执行
+        in: query
+        name: run_type
+        required: true
+        type: integer
       produces:
       - application/json
       responses:
@@ -367,10 +375,10 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/models.Response'
-      summary: Task Execute
+      summary: 执行扫描任务
       tags:
       - Task
-  /api/v1/task/status/enum:
+  /api/v1/task/enum:
     get:
       consumes:
       - application/json
@@ -385,7 +393,7 @@ paths:
           description: Bad Request
           schema:
             $ref: '#/definitions/models.Response'
-      summary: Get task Status Enum
+      summary: 获取任务所有枚举信息
       tags:
       - Task
 swagger: "2.0"

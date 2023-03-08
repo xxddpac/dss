@@ -36,23 +36,23 @@ var doc = `{
                 "tags": [
                     "Grpc"
                 ],
-                "summary": "Get Grpc Client",
+                "summary": "获取gRPC客户端信息(IPV4、系统类型、系统版本、主机名、是否在线)",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Fuzzy Query",
+                        "description": "模糊查询",
                         "name": "search",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "Current Page Default:1",
+                        "description": "当前页数,默认值:1",
                         "name": "page",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "Current Size Default:10",
+                        "description": "当前条数,默认值:10",
                         "name": "size",
                         "in": "query"
                     }
@@ -84,35 +84,35 @@ var doc = `{
                 "tags": [
                     "Rule"
                 ],
-                "summary": "Get Rule List",
+                "summary": "获取规则列表",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Fuzzy Query",
+                        "description": "模糊查询",
                         "name": "search",
                         "in": "query"
                     },
                     {
                         "type": "integer",
-                        "description": "Rule Type 1:Single 2:Range 3:CIDR",
+                        "description": "枚举类型,1:单个IP类型 2:连续范围IP类型 3:网段类型",
                         "name": "type",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "Rule Status true/false",
+                        "description": "状态查询,true/false",
                         "name": "status",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "Current Page Default:1",
+                        "description": "当前页数,默认值:1",
                         "name": "page",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "Current Size Default:10",
+                        "description": "当前条数,默认值:10",
                         "name": "size",
                         "in": "query"
                     }
@@ -142,17 +142,17 @@ var doc = `{
                 "tags": [
                     "Rule"
                 ],
-                "summary": "Modify Rule By ID",
+                "summary": "根据ID修改规则",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Rule ID",
+                        "description": "规则ID",
                         "name": "id",
                         "in": "query",
                         "required": true
                     },
                     {
-                        "description": "Request Body",
+                        "description": "规则请求体",
                         "name": "param",
                         "in": "body",
                         "required": true,
@@ -186,10 +186,10 @@ var doc = `{
                 "tags": [
                     "Rule"
                 ],
-                "summary": "Add New Rule",
+                "summary": "创建规则",
                 "parameters": [
                     {
-                        "description": "Request Body",
+                        "description": "规则请求体",
                         "name": "param",
                         "in": "body",
                         "required": true,
@@ -223,11 +223,11 @@ var doc = `{
                 "tags": [
                     "Rule"
                 ],
-                "summary": "Delete Rule By ID",
+                "summary": "根据ID删除规则",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Rule ID",
+                        "description": "规则ID",
                         "name": "id",
                         "in": "query",
                         "required": true
@@ -249,7 +249,7 @@ var doc = `{
                 }
             }
         },
-        "/api/v1/rule/type/enum": {
+        "/api/v1/rule/enum": {
             "get": {
                 "consumes": [
                     "application/json"
@@ -260,7 +260,7 @@ var doc = `{
                 "tags": [
                     "Rule"
                 ],
-                "summary": "Display rule type enum",
+                "summary": "获取规则所有枚举信息",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -288,35 +288,35 @@ var doc = `{
                 "tags": [
                     "Scan"
                 ],
-                "summary": "Get Scan Result",
+                "summary": "获取扫描结果列表",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Fuzzy Query",
+                        "description": "模糊查询",
                         "name": "search",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "Location Select",
+                        "description": "根据规则定义的location筛选扫描结果",
                         "name": "location",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "Date Select",
+                        "description": "根据日期(year-month-day)筛选扫描结果",
                         "name": "date",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "Current Page Default:1",
+                        "description": "当前页数,默认值:1",
                         "name": "page",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "Current Size Default:10",
+                        "description": "当前条数,默认值:10",
                         "name": "size",
                         "in": "query"
                     }
@@ -348,7 +348,7 @@ var doc = `{
                 "tags": [
                     "Scan"
                 ],
-                "summary": "Clear data more than 7 days",
+                "summary": "作为计划任务每日执行,只保留最近7天扫描结果",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -376,7 +376,7 @@ var doc = `{
                 "tags": [
                     "Scan"
                 ],
-                "summary": "GroupBy Location",
+                "summary": "获取规则提供location作为查询参数",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -404,7 +404,7 @@ var doc = `{
                 "tags": [
                     "Scan"
                 ],
-                "summary": "Compare yesterday with today,if new port open in today will notify by workChat",
+                "summary": "作为计划任务每日执行,对比今日与昨日是否有新增端口开放,若有则通过企业微信发送提醒",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -432,7 +432,7 @@ var doc = `{
                 "tags": [
                     "Scan"
                 ],
-                "summary": "last 7 days scan trend",
+                "summary": "最近7天开放端口数量趋势",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -460,29 +460,35 @@ var doc = `{
                 "tags": [
                     "Task"
                 ],
-                "summary": "Get task Info",
+                "summary": "Get 获取任务信息(执行时间、执行进度、执行状态、任务类型)",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Fuzzy Query",
+                        "description": "模糊查询",
                         "name": "search",
                         "in": "query"
                     },
                     {
                         "type": "integer",
-                        "description": "1:Waiting,2:Running,3:Finished,4:Error",
+                        "description": "任务状态枚举,1:等待中,2:检测中,3:已完成,4:出错",
                         "name": "status",
                         "in": "query"
                     },
                     {
+                        "type": "integer",
+                        "description": "任务类型枚举,1:计划任务调度执行,2:手动执行",
+                        "name": "run_type",
+                        "in": "query"
+                    },
+                    {
                         "type": "string",
-                        "description": "Current Page Default:1",
+                        "description": "当前页数,默认值:1",
                         "name": "page",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "Current Size Default:10",
+                        "description": "当前条数,默认值:10",
                         "name": "size",
                         "in": "query"
                     }
@@ -512,12 +518,19 @@ var doc = `{
                 "tags": [
                     "Task"
                 ],
-                "summary": "Task Execute",
+                "summary": "执行扫描任务",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "rule id",
+                        "description": "规则ID",
                         "name": "id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "任务类型枚举,1:计划任务调度执行,2:手动执行",
+                        "name": "run_type",
                         "in": "query",
                         "required": true
                     }
@@ -538,7 +551,7 @@ var doc = `{
                 }
             }
         },
-        "/api/v1/task/status/enum": {
+        "/api/v1/task/enum": {
             "get": {
                 "consumes": [
                     "application/json"
@@ -549,7 +562,7 @@ var doc = `{
                 "tags": [
                     "Task"
                 ],
-                "summary": "Get task Status Enum",
+                "summary": "获取任务所有枚举信息",
                 "responses": {
                     "200": {
                         "description": "OK",

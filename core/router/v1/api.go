@@ -3,33 +3,30 @@ package v1
 import "github.com/gin-gonic/gin"
 
 func Register(v1 *gin.RouterGroup) {
-	// this rule defines the scanning host and port
 	rule := v1.Group("/rule")
 	{
-		rule.POST("", Rule.Post)     // add rule
-		rule.GET("", Rule.Get)       // list rule
-		rule.PUT("", Rule.Put)       // modify rule
-		rule.DELETE("", Rule.Delete) // delete rule
-		rule.GET("enum", Rule.Enum)  // display rule type enum
+		rule.POST("", Rule.Post)
+		rule.GET("", Rule.Get)
+		rule.PUT("", Rule.Put)
+		rule.DELETE("", Rule.Delete)
+		rule.GET("enum", Rule.Enum)
 	}
-	// task scheduler
 	task := v1.Group("/task")
 	{
-		task.POST("", Task.Post) // push task to redis
+		task.POST("", Task.Post)
 		task.GET("", Task.Get)
 		task.GET("enum", Task.Enum)
 	}
-	//scan result
 	scan := v1.Group("/scan")
 	{
-		scan.GET("", Scan.Get)              // list scan result
-		scan.GET("trend", Scan.Trend)       // last 7 days scan result trend
-		scan.GET("remind", Scan.Remind)     // send notification if new port open  (schedule)
-		scan.GET("location", Scan.Location) // location select from web front
-		scan.DELETE("clear", Scan.Clear)    // save last 7 days result (schedule)
+		scan.GET("", Scan.Get)
+		scan.GET("trend", Scan.Trend)
+		scan.GET("remind", Scan.Remind)
+		scan.GET("location", Scan.Location)
+		scan.DELETE("clear", Scan.Clear)
 	}
 	grpc := v1.Group("/grpc")
 	{
-		grpc.GET("client", Grpc.Get) // get all gRPC client info
+		grpc.GET("client", Grpc.Get)
 	}
 }

@@ -18,11 +18,11 @@ type _Rule struct {
 }
 
 // Post
-// @Summary Add New Rule
+// @Summary 创建规则
 // @Tags Rule
 // @Accept  json
 // @Produce  json
-// @Param param body models.Rule true "Request Body"
+// @Param param body models.Rule true "规则请求体"
 // @Success 200 {object} models.Response
 // @Failure 400 {object} models.Response
 // @Router /api/v1/rule [post]
@@ -82,11 +82,11 @@ func (*_Rule) Post(ctx *gin.Context) {
 }
 
 // Delete
-// @Summary Delete Rule By ID
+// @Summary 根据ID删除规则
 // @Tags Rule
 // @Accept  json
 // @Produce  json
-// @Param id query string true "Rule ID"
+// @Param id query string true "规则ID"
 // @Success 200 {object} models.Response
 // @Failure 400 {object} models.Response
 // @Router /api/v1/rule [delete]
@@ -107,15 +107,15 @@ func (*_Rule) Delete(ctx *gin.Context) {
 }
 
 // Get
-// @Summary Get Rule List
+// @Summary 获取规则列表
 // @Tags Rule
 // @Accept  json
 // @Produce  json
-// @Param search query string false "Fuzzy Query"
-// @Param type query int false "Rule Type 1:Single 2:Range 3:CIDR"
-// @Param status query string false "Rule Status true/false"
-// @Param page query string false "Current Page Default:1"
-// @Param size query string false "Current Size Default:10"
+// @Param search query string false "模糊查询"
+// @Param type query int false "枚举类型,1:单个IP类型 2:连续范围IP类型 3:网段类型"
+// @Param status query string false "状态查询,true/false"
+// @Param page query string false "当前页数,默认值:1"
+// @Param size query string false "当前条数,默认值:10"
 // @Success 200 {object} models.Response
 // @Failure 400 {object} models.Response
 // @Router /api/v1/rule [get]
@@ -137,12 +137,12 @@ func (*_Rule) Get(ctx *gin.Context) {
 }
 
 // Put
-// @Summary Modify Rule By ID
+// @Summary 根据ID修改规则
 // @Tags Rule
 // @Accept  json
 // @Produce  json
-// @Param id query string true "Rule ID"
-// @Param param body models.Rule true "Request Body"
+// @Param id query string true "规则ID"
+// @Param param body models.Rule true "规则请求体"
 // @Success 200 {object} models.Response
 // @Failure 400 {object} models.Response
 // @Router /api/v1/rule [put]
@@ -168,13 +168,13 @@ func (*_Rule) Put(ctx *gin.Context) {
 }
 
 // Enum
-// @Summary Display rule type enum
+// @Summary 获取规则所有枚举信息
 // @Tags Rule
 // @Accept  json
 // @Produce  json
 // @Success 200 {object} models.Response
 // @Failure 400 {object} models.Response
-// @Router /api/v1/rule/type/enum [get]
+// @Router /api/v1/rule/enum [get]
 func (*_Rule) Enum(ctx *gin.Context) {
 	var (
 		g = models.Gin{Ctx: ctx}
