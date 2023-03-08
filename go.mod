@@ -8,7 +8,7 @@ require (
 	github.com/gin-gonic/gin v1.9.0
 	github.com/globalsign/mgo v0.0.0-20181015135952-eeefdecb41b8
 	github.com/go-redis/redis v6.15.9+incompatible
-	github.com/hashicorp/consul/api v1.19.1
+	github.com/hashicorp/consul/api v1.20.0
 	github.com/satori/go.uuid v1.2.0
 	github.com/shirou/gopsutil/v3 v3.23.2
 	github.com/spf13/cobra v1.6.1
