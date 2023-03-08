@@ -81,7 +81,7 @@ func parseRule(r models.RuleInsert, id bson.ObjectId) {
 	}
 }
 
-func (*_TaskManager) Post(query models.QueryID) error {
+func (*_TaskManager) Post(query models.TaskParam) error {
 	var (
 		err error
 		r   models.RuleInsert
@@ -100,9 +100,10 @@ func (*_TaskManager) Post(query models.QueryID) error {
 		return nil
 	}
 	task := models.TaskInsertFunc(models.Task{
-		RuleId: query.ID,
-		Name:   r.Name,
-		Status: global.Waiting,
+		RuleId:  query.ID,
+		Name:    r.Name,
+		Status:  global.Waiting,
+		RunType: query.RunType,
 	})
 	if err = dao.Repo(global.ScanTask).Insert(task); err != nil {
 		return err
@@ -177,6 +178,9 @@ func (*_TaskManager) Get(param models.TaskQuery) (interface{}, error) {
 	)
 	if param.Status != 0 {
 		query["status"] = param.Status
+	}
+	if param.RunType != 0 {
+		query["run_type"] = param.RunType
 	}
 	if param.Search != "" {
 		query["$or"] = []bson.M{

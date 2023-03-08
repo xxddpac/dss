@@ -6,6 +6,11 @@ import (
 	"time"
 )
 
+type TaskParam struct {
+	QueryID
+	RunType global.TaskRunType `form:"run_type" binding:"required"`
+}
+
 type Task struct {
 	RuleId       string             `json:"rule_id" bson:"rule_id"`
 	Name         string             `json:"name" bson:"name"`
@@ -34,8 +39,9 @@ func TaskInsertFunc(t Task) *TaskInsert {
 
 type TaskQuery struct {
 	QueryPage
-	Status global.TaskStatus `form:"status"`
-	Search string            `form:"search"`
+	Status  global.TaskStatus  `form:"status"`
+	RunType global.TaskRunType `form:"run_type"`
+	Search  string             `form:"search"`
 }
 
 func TaskQueryFunc() *TaskQuery {
@@ -51,7 +57,8 @@ type TaskQueryResult struct {
 
 type TaskQueryResultDto struct {
 	TaskQueryDto
-	StatusDesc string `json:"status_desc"`
+	StatusDesc  string `json:"status_desc"`
+	RunTypeDesc string `json:"run_type_desc"`
 }
 
 type TaskQueryDto struct {
@@ -68,6 +75,7 @@ func TaskQueryResultFunc(t []*TaskInsert) []TaskQueryResultDto {
 		resp.TaskQueryDto = *item.ToDto()
 		resp.Task = item.Task
 		resp.StatusDesc = item.Status.String()
+		resp.RunTypeDesc = item.RunType.String()
 		result = append(result, resp)
 	}
 	return result

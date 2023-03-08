@@ -24,7 +24,7 @@ type _Task struct {
 func (*_Task) Post(ctx *gin.Context) {
 	var (
 		g     = models.Gin{Ctx: ctx}
-		query models.QueryID
+		query models.TaskParam
 	)
 	if err := ctx.ShouldBindQuery(&query); err != nil {
 		g.Fail(http.StatusBadRequest, err)
