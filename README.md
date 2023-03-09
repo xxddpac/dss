@@ -20,12 +20,21 @@ on producer node
 
 ```bash
 go run main.go producer -c conf.dev.toml
+
+OR
+
+./bin/dss producer -c conf.dev.toml
+
 ```
 
 on multiple consumer nodes
 
 ```bash
 go run main.go consumer -c conf.dev.toml
+
+OR
+
+./bin/dss consumer -c conf.dev.toml
 ```
 
 api docs
@@ -50,6 +59,8 @@ http://consumer_ip:5000/debug/pprof/
 ### Project structure
 
 ```bash
+├── bin
+│   └── dss
 ├── common
 │   ├── async
 │   │   ├── worker.go
