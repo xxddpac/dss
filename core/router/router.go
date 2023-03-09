@@ -1,6 +1,7 @@
 package router
 
 import (
+	"dss/core/config"
 	"dss/core/models"
 	v1 "dss/core/router/v1"
 	_ "dss/core/swagger"
@@ -14,7 +15,9 @@ import (
 func NewHttpRouter() *gin.Engine {
 	router := gin.New()
 	router.Use(gin.Recovery())
-	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	if config.CoreConf.Mode == "debug" {
+		router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	}
 	router.NoRoute(func(c *gin.Context) {
 		resp := models.Gin{Ctx: c}
 		resp.Fail(http.StatusNotFound, e.New("not found route"))
