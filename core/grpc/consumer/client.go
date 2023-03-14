@@ -36,35 +36,29 @@ func Startup(ctx context.Context) {
 					log.WarnF("receive a ng signal,quit...")
 					return
 				}
-				conn, err = getClientConn(dis.Get())
-				if err != nil {
-					log.Fatal(err.Error())
-				}
-				client, err = pb.NewStreamServiceClient(conn).Record(ctx)
-				if err != nil {
-					log.Fatal(err.Error())
-				}
-
-				req := pb.StreamRequest{Pt: &pb.StreamPoint{
-					Host:            host.LocalIP(),
-					Name:            host.Name.Load().(string),
-					Platform:        host.Platform.Load().(string),
-					PlatformVersion: host.PlatformVersion.Load().(string),
-				}}
-				if err = client.Send(&req); err != nil {
-					log.Errorf(err.Error())
-				}
 				func() {
-					defer func(conn *grpc.ClientConn) {
-						if err = conn.Close(); err != nil {
-							log.Errorf(err.Error())
-						}
-					}(conn)
+					conn, err = getClientConn(dis.Get())
+					if err != nil {
+						log.Fatal(err.Error())
+					}
+					client, err = pb.NewStreamServiceClient(conn).Record(ctx)
+					if err != nil {
+						log.Fatal(err.Error())
+					}
 					defer func(client pb.StreamService_RecordClient) {
 						if err = client.CloseSend(); err != nil {
 							log.Errorf(err.Error())
 						}
 					}(client)
+					req := pb.StreamRequest{Pt: &pb.StreamPoint{
+						Host:            host.LocalIP(),
+						Name:            host.Name.Load().(string),
+						Platform:        host.Platform.Load().(string),
+						PlatformVersion: host.PlatformVersion.Load().(string),
+					}}
+					if err = client.Send(&req); err != nil {
+						log.Errorf(err.Error())
+					}
 				}()
 			case <-ctx.Done():
 				return
